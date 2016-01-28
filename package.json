@@ -1,0 +1,44 @@
+{
+  "name": "chicago-crime",
+  "version": "1.0.0",
+  "description": "An open source visualization of known criminal activity in the city of Chicago from 2001 onwards",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JavascriptFTW/Chicago-Crime.git"
+  },
+  "keywords": [
+    "data",
+    "visualization",
+    "chicago",
+    "crime"
+  ],
+  "author": "Joshua Gammage",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/JavascriptFTW/Chicago-Crime/issues"
+  },
+  "homepage": "https://github.com/JavascriptFTW/Chicago-Crime#readme",
+  "devDependencies": {
+    "autoprefixer": "^6.3.1",
+    "babel-preset-es2015": "^6.3.13",
+    "browserify": "^13.0.0",
+    "gulp": "^3.9.0",
+    "gulp-babel": "^6.1.1",
+    "gulp-concat": "^2.6.0",
+    "gulp-postcss": "^6.0.1",
+    "gulp-sourcemaps": "^1.6.0",
+    "gulp-stylus": "^2.3.0",
+    "mocha": "^2.4.5",
+    "postcss-short": "^1.4.0",
+    "vinyl-buffer": "^1.0.0",
+    "vinyl-source-stream": "^1.1.0"
+  },
+  "dependencies": {
+    "d3": "^3.5.14",
+    "underscore": "^1.8.3"
+  }
+}
