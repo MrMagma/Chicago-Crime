@@ -9,7 +9,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var _ = require("underscore");
 
 function parseURL(url) {
-    var urlDat = url.match(/(.+)(?:\?(.+)){0,1}/);
+    var urlDat = url.match(/([^?]+)(?:\?(.+)){0,1}/);
 
     if (urlDat === null) {
         return {

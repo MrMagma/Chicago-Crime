@@ -29,12 +29,16 @@ class MapPanel {
         this.loadData();
     }
     loadData() {
-        if (!crimedata.hasLoaded) {
+        let year = (new Date()).getFullYear();
+        if (!crimedata.hasYearLoaded(year)) {
+            if (!crimedata.isYearRequested(year)) {
+                crimedata.loadYear(year);
+            }
             // If our data is taking more than 1/2 second to load let people
             // know that we're actually doing something
             let spinTimer = setTimeout(this.spinner.show.bind(this.spinner),
                 500);
-            crimedata.onLoad(() => {
+            crimedata.onYearLoad(year, () => {
                 clearTimeout(spinTimer);
                 this.spinner.hide();
                 this.displayData();

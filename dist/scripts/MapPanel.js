@@ -47,12 +47,16 @@ var MapPanel = function () {
         value: function loadData() {
             var _this = this;
 
-            if (!crimedata.hasLoaded) {
+            var year = new Date().getFullYear();
+            if (!crimedata.hasYearLoaded(year)) {
                 (function () {
+                    if (!crimedata.isYearRequested(year)) {
+                        crimedata.loadYear(year);
+                    }
                     // If our data is taking more than 1/2 second to load let people
                     // know that we're actually doing something
                     var spinTimer = setTimeout(_this.spinner.show.bind(_this.spinner), 500);
-                    crimedata.onLoad(function () {
+                    crimedata.onYearLoad(year, function () {
                         clearTimeout(spinTimer);
                         _this.spinner.hide();
                         _this.displayData();
