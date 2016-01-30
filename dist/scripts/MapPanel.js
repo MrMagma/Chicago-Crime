@@ -11,6 +11,20 @@ var LoadingOverlay = require("./LoadingOverlay.js");
 var crimedata = require("./crimedata.js");
 var mapsutil = require("./mapsutil.js");
 
+var crimeTypes = [
+// Property
+"BURGLARY", "ROBBERY", "THEFT", "MOTOR VEHICLE THEFT", "ARSON", "DECEPTIVE PRACTICE", "CRIMINAL DAMAGE",
+// Personal
+"ASSAULT", "BATTERY",
+// Sexual
+"CRIMINAL SEXUAL ABUSE", "CRIM SEXUAL ASSAULT", "SEX OFFENSE", "PROSTITUTION",
+// Domestic
+"CRIMINAL TRESPASS", "PUBLIC PEACE VIOLATION", "INTERFERENCE WITH PUBLIC OFFICER", "KIDNAPPING", "OFFENSE INVOLVING CHILDREN",
+// Substances
+"NARCOTICS", "LIQUOR LAW VIOLATION",
+// OTHER
+"OTHER OFFENSE", "WEAPONS VIOLATION"];
+
 var MapPanel = function () {
     function MapPanel() {
         var cfg = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
@@ -24,6 +38,12 @@ var MapPanel = function () {
         var _cfg$zoom = cfg.zoom;
         var zoom = _cfg$zoom === undefined ? 11 : _cfg$zoom;
         var el = cfg.el;
+        var _cfg$bounds = cfg.bounds;
+        var bounds = _cfg$bounds === undefined ? {
+            min: new google.maps.LatLng(-Infinity, -Infinity),
+            max: new google.maps.LatLng(Infinity, Infinity),
+            zoom: [10, 21]
+        } : _cfg$bounds;
 
         this.el = d3.select(el);
         this.map = new google.maps.Map(this.el.node(), {
@@ -33,9 +53,9 @@ var MapPanel = function () {
             mapTypeId: google.maps.MapTypeId.ROADMAP
         });
 
-        mapsutil.boundMapPos(this.map, new google.maps.LatLngBounds(new google.maps.LatLng(41.5, -88), new google.maps.LatLng(42, -87.5)));
+        mapsutil.boundMapPos(this.map, new google.maps.LatLngBounds(bounds.min, bounds.max));
 
-        mapsutil.boundMapZoom(this.map, [10, 21]);
+        mapsutil.boundMapZoom(this.map, bounds.zoom);
 
         this.spinner = new LoadingOverlay(this.el.node());
 
@@ -78,26 +98,17 @@ var MapPanel = function () {
                 }
             });
 
-            var heatmap = new google.maps.visualization.HeatmapLayer({
-                map: this.map,
-                data: crimes.map(function (crime) {
-                    return new google.maps.LatLng(parseFloat(crime.latitude), parseFloat(crime.longitude));
-                })
+            var crimePoints = crimes.map(function (crime) {
+                return {
+                    location: new google.maps.LatLng(parseFloat(crime.latitude), parseFloat(crime.longitude))
+                };
             });
 
-            // for (let crime of crimes) {
-            //     if (!crime) {
-            //         continue;
-            //     }
-            //     new google.maps.Marker({
-            //         position: {
-            //             lat: parseFloat(crime.latitude),
-            //             lng: parseFloat(crime.longitude)
-            //         },
-            //         map: this.map,
-            //         title: crime.primary_type
-            //     });
-            // }
+            var heatmap = new google.maps.visualization.HeatmapLayer({
+                map: this.map,
+                data: crimePoints,
+                dissipating: true
+            });
         }
     }]);
 

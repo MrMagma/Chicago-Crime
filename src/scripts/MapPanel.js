@@ -5,9 +5,44 @@ var LoadingOverlay = require("./LoadingOverlay.js");
 let crimedata = require("./crimedata.js");
 var mapsutil = require("./mapsutil.js");
 
+var crimeTypes = [
+    // Property
+    "BURGLARY",
+    "ROBBERY",
+    "THEFT",
+    "MOTOR VEHICLE THEFT",
+    "ARSON",
+    "DECEPTIVE PRACTICE",
+    "CRIMINAL DAMAGE",
+    // Personal
+    "ASSAULT",
+    "BATTERY",
+    // Sexual
+    "CRIMINAL SEXUAL ABUSE",
+    "CRIM SEXUAL ASSAULT",
+    "SEX OFFENSE",
+    "PROSTITUTION",
+    // Domestic
+    "CRIMINAL TRESPASS",
+    "PUBLIC PEACE VIOLATION",
+    "INTERFERENCE WITH PUBLIC OFFICER",
+    "KIDNAPPING",
+    "OFFENSE INVOLVING CHILDREN",
+    // Substances
+    "NARCOTICS",
+    "LIQUOR LAW VIOLATION",
+    // OTHER
+    "OTHER OFFENSE",
+    "WEAPONS VIOLATION"
+];
+
 class MapPanel {
     constructor(cfg = {}) {
-        let {lat = 10, lng = 10, zoom = 11, el} = cfg;
+        let {lat = 10, lng = 10, zoom = 11, el, bounds = {
+            min: new google.maps.LatLng(-Infinity, -Infinity),
+            max: new google.maps.LatLng(Infinity, Infinity),
+            zoom: [10, 21]
+        }} = cfg;
         
         this.el = d3.select(el);
         this.map = new google.maps.Map(this.el.node(), {
@@ -18,11 +53,11 @@ class MapPanel {
         });
         
         mapsutil.boundMapPos(this.map, new google.maps.LatLngBounds(
-            new google.maps.LatLng(41.5, -88),
-            new google.maps.LatLng(42, -87.5)
+            bounds.min,
+            bounds.max
         ));
 
-        mapsutil.boundMapZoom(this.map, [10, 21]);
+        mapsutil.boundMapZoom(this.map, bounds.zoom);
         
         this.spinner = new LoadingOverlay(this.el.node());
         
@@ -53,24 +88,18 @@ class MapPanel {
             where: crime => crime.year === year
         });
         
-        var heatmap = new google.maps.visualization.HeatmapLayer({
-            map: this.map,
-            data: crimes.map(crime => new google.maps.LatLng(parseFloat(crime.latitude), parseFloat(crime.longitude)))
+        let crimePoints = crimes.map(crime => {
+            return {
+                location: new google.maps.LatLng(parseFloat(crime.latitude),
+                    parseFloat(crime.longitude))
+            };
         });
         
-        // for (let crime of crimes) {
-        //     if (!crime) {
-        //         continue;
-        //     }
-        //     new google.maps.Marker({
-        //         position: {
-        //             lat: parseFloat(crime.latitude),
-        //             lng: parseFloat(crime.longitude)
-        //         },
-        //         map: this.map,
-        //         title: crime.primary_type
-        //     });
-        // }
+        var heatmap = new google.maps.visualization.HeatmapLayer({
+            map: this.map,
+            data: crimePoints,
+            dissipating: true
+        });
     }
 }
 
