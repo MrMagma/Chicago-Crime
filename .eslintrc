@@ -1,0 +1,18 @@
+ecmaFeatures:
+    arrowFunctions: true
+    binaryLiterals: true
+    blockBindings: true
+    classes: true
+    defaultParams: true
+    destructuring: true
+    forOf: true
+    generators: true
+    objectLiteralComputedProperties: true
+    objectLiteralShorthandMethods: true
+    objectLiteralShorthandProperties: true
+    octalLiterals: true
+    restParams: true
+    spread: true
+    templateStrings: true
+    unicodePointEscapes: true
+    templateStrings: true
