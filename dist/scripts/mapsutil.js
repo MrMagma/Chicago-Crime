@@ -26,6 +26,19 @@ var mapsutil = {
                 map.setZoom(lastValid);
             }
         });
+    },
+    freezeMap: function freezeMap(map) {
+        var center = map.getCenter();
+        var zoom = map.getZoom();
+        map.addListener("bounds_changed", function () {
+            if (map.getZoom() !== zoom) {
+                map.setZoom(zoom);
+            }
+            var nCenter = map.getCenter();
+            if (nCenter.lat !== center.lat || nCenter.lng !== center.lng) {
+                map.panTo(center);
+            }
+        });
     }
 };
 
