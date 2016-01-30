@@ -65,6 +65,7 @@ function parseURL(url) {
 
 function stringifyURLParams(params) {
     var paramStr = "?";
+
     for (var key in params) {
         if (params.hasOwnProperty(key)) {
             if (paramStr.length > 1) {
@@ -78,6 +79,8 @@ function stringifyURLParams(params) {
             }
         }
     }
+
+    return paramStr;
 }
 
 var JSONRequest = function () {
@@ -127,12 +130,15 @@ var JSONRequest = function () {
                     document.body.appendChild(script);
                 })();
             } else {
-                var req = new XMLHttpRequest();
-                req.addEventListener("load", function () {
-                    _this.onload(JSON.parse(_this.responseText));
-                });
-                req.open(this.method, this.url + stringifyURLParams(this.params));
-                req.send();
+                (function () {
+                    var self = _this;
+                    var req = new XMLHttpRequest();
+                    req.addEventListener("load", function () {
+                        self.onload(JSON.parse(this.responseText));
+                    });
+                    req.open(_this.method, _this.url + stringifyURLParams(_this.params));
+                    req.send();
+                })();
             }
         }
     }]);

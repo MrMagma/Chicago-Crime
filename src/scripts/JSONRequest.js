@@ -29,6 +29,7 @@ function parseURL(url) {
 
 function stringifyURLParams(params) {
     let paramStr = "?";
+    
     for (let key in params) {
         if (params.hasOwnProperty(key)) {
             if (paramStr.length > 1) {
@@ -42,6 +43,8 @@ function stringifyURLParams(params) {
             }
         }
     }
+    
+    return paramStr;
 }
 
 class JSONRequest {
@@ -68,9 +71,10 @@ class JSONRequest {
             script.setAttribute("src", this.url + stringifyURLParams(this.params));
             document.body.appendChild(script);
         } else {
+            let self = this;
             let req = new XMLHttpRequest();
-            req.addEventListener("load", () => {
-                this.onload(JSON.parse(this.responseText));
+            req.addEventListener("load", function() {
+                self.onload(JSON.parse(this.responseText));
             });
             req.open(this.method, this.url + stringifyURLParams(this.params));
             req.send();

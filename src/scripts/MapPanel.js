@@ -1,7 +1,8 @@
 var d3 = require("d3");
 var _ = require("underscore");
 
-var JSONRequest = require("./JSONRequest.js");
+var LoadingOverlay = require("./LoadingOverlay.js");
+let crimedata = require("./crimedata.js");
 var mapsutil = require("./mapsutil.js");
 
 class MapPanel {
@@ -22,6 +23,28 @@ class MapPanel {
         ));
 
         mapsutil.boundMapZoom(this.map, [10, 21]);
+        
+        this.spinner = new LoadingOverlay(this.el.node());
+        
+        this.loadData();
+    }
+    loadData() {
+        if (!crimedata.hasLoaded) {
+            // If our data is taking more than 1/2 second to load let people
+            // know that we're actually doing something
+            let spinTimer = setTimeout(this.spinner.show.bind(this.spinner),
+                500);
+            crimedata.onLoad(() => {
+                clearTimeout(spinTimer);
+                this.spinner.hide();
+                this.displayData();
+            });
+        } else {
+            this.displayData();
+        }
+    }
+    displayData() {
+        
     }
 }
 
