@@ -68,7 +68,37 @@ var MapPanel = function () {
         }
     }, {
         key: "displayData",
-        value: function displayData() {}
+        value: function displayData() {
+            var year = arguments.length <= 0 || arguments[0] === undefined ? new Date().getFullYear() : arguments[0];
+
+            year = year.toString();
+            var crimes = crimedata.all({
+                where: function where(crime) {
+                    return crime.year === year;
+                }
+            });
+
+            var heatmap = new google.maps.visualization.HeatmapLayer({
+                map: this.map,
+                data: crimes.map(function (crime) {
+                    return new google.maps.LatLng(parseFloat(crime.latitude), parseFloat(crime.longitude));
+                })
+            });
+
+            // for (let crime of crimes) {
+            //     if (!crime) {
+            //         continue;
+            //     }
+            //     new google.maps.Marker({
+            //         position: {
+            //             lat: parseFloat(crime.latitude),
+            //             lng: parseFloat(crime.longitude)
+            //         },
+            //         map: this.map,
+            //         title: crime.primary_type
+            //     });
+            // }
+        }
     }]);
 
     return MapPanel;

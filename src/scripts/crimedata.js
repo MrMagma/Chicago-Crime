@@ -51,7 +51,9 @@ let datautil = {
             });
 
             req.onload = (json) => {
-                crimedata.push.apply(crimedata, json);
+                crimedata.push.apply(crimedata, json
+                    .filter(val => _.isString(val.latitude) &&
+                        _.isString(val.longitude)));
                 loaded = true;
                 for (let cb of callbacks[year]) {
                     cb();

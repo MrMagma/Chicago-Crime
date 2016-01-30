@@ -76,7 +76,9 @@ var datautil = {
             });
 
             req.onload = function (json) {
-                crimedata.push.apply(crimedata, json);
+                crimedata.push.apply(crimedata, json.filter(function (val) {
+                    return _.isString(val.latitude) && _.isString(val.longitude);
+                }));
                 loaded = true;
                 var _iteratorNormalCompletion2 = true;
                 var _didIteratorError2 = false;

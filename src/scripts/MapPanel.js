@@ -47,8 +47,30 @@ class MapPanel {
             this.displayData();
         }
     }
-    displayData() {
+    displayData(year = (new Date()).getFullYear()) {
+        year = year.toString();
+        let crimes = crimedata.all({
+            where: crime => crime.year === year
+        });
         
+        var heatmap = new google.maps.visualization.HeatmapLayer({
+            map: this.map,
+            data: crimes.map(crime => new google.maps.LatLng(parseFloat(crime.latitude), parseFloat(crime.longitude)))
+        });
+        
+        // for (let crime of crimes) {
+        //     if (!crime) {
+        //         continue;
+        //     }
+        //     new google.maps.Marker({
+        //         position: {
+        //             lat: parseFloat(crime.latitude),
+        //             lng: parseFloat(crime.longitude)
+        //         },
+        //         map: this.map,
+        //         title: crime.primary_type
+        //     });
+        // }
     }
 }
 
