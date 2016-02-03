@@ -1,0 +1,41 @@
+crime-style(fill-color, stroke-color)
+    fill fill-color
+    // stroke stroke-color
+
+.crime-type
+    // Property
+    &-BURGLARY
+    &-ROBBERY,
+    &-THEFT,
+    &-MOTOR_VEHICLE_THEFT,
+    &-ARSON,
+    &-DECEPTIVE_PRACTICE,
+    &-CRIMINAL_DAMAGE
+        crime-style #4CAF50 #69F0AE
+    // Personal
+    &-ASSAULT,
+    &-BATTERY
+        crime-style #F44336 #FF5252
+    // Sexual
+    &-CRIMINAL_SEXUAL_ABUSE,
+    &-CRIM_SEXUAL_ASSAULT,
+    &-SEX_OFFENSE,
+    &-PROSTITUTION
+        crime-style #CDDC39 #EEFF41
+    // Minor domestic
+    &-CRIMINAL_TRESPASS,
+    &-PUBLIC_PEACE_VIOLATION,
+    &-INTERFERENCE_WITH_PUBLIC_OFFICER
+        crime-style #03A9F4 #40C4FF
+    // Major domestic
+    &-KIDNAPPING,
+    &-OFFENSE_INVOLVING_CHILDREN
+        crime-style #3F51B5 #536DFE
+    // Substances
+    &-NARCOTICS,
+    &-LIQUOR_LAW_VIOLATION
+        crime-style #795548 #A1887F
+    // OTHER
+    &-OTHER_OFFENSE,
+    &-WEAPONS_VIOLATION
+        crime-style #9E9E9E #BDBDBD
