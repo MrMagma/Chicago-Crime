@@ -12,9 +12,9 @@ function afterLoad() {
         zoom: 10,
         bounds: {
             min: new google.maps.LatLng(constants.map.lat.min,
-                constants.map.lat.min),
-            max: new google.maps.LatLng(constants.map.lng.min,
                 constants.map.lng.min),
+            max: new google.maps.LatLng(constants.map.lat.max,
+                constants.map.lng.max),
             zoom: [constants.map.zoom.min, constants.map.zoom.max]
         }
     });
