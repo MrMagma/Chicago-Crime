@@ -8,22 +8,9 @@ var d3 = require("d3");
 var _ = require("underscore");
 
 var LoadingOverlay = require("./LoadingOverlay.js");
+var CrimeMap = require("./CrimeMap.js");
 var crimedata = require("./crimedata.js");
 var mapsutil = require("./mapsutil.js");
-
-var crimeTypes = [
-// Property
-"BURGLARY", "ROBBERY", "THEFT", "MOTOR VEHICLE THEFT", "ARSON", "DECEPTIVE PRACTICE", "CRIMINAL DAMAGE",
-// Personal
-"ASSAULT", "BATTERY",
-// Sexual
-"CRIMINAL SEXUAL ABUSE", "CRIM SEXUAL ASSAULT", "SEX OFFENSE", "PROSTITUTION",
-// Domestic
-"CRIMINAL TRESPASS", "PUBLIC PEACE VIOLATION", "INTERFERENCE WITH PUBLIC OFFICER", "KIDNAPPING", "OFFENSE INVOLVING CHILDREN",
-// Substances
-"NARCOTICS", "LIQUOR LAW VIOLATION",
-// OTHER
-"OTHER OFFENSE", "WEAPONS VIOLATION"];
 
 var MapPanel = function () {
     function MapPanel() {
@@ -46,18 +33,18 @@ var MapPanel = function () {
         } : _cfg$bounds;
 
         this.el = d3.select(el);
-        this.map = new google.maps.Map(this.el.node(), {
+        this.map = new google.maps.Map(this.el.append("div").attr("class", "map-container").node(), {
             center: { lat: lat, lng: lng },
             zoom: zoom,
             disableDefaultUI: true,
             mapTypeId: google.maps.MapTypeId.ROADMAP
         });
+        this.spinner = new LoadingOverlay(this.el.node());
+        this.crimeMap = new CrimeMap(this.el.node());
 
         mapsutil.boundMapPos(this.map, new google.maps.LatLngBounds(bounds.min, bounds.max));
 
         mapsutil.boundMapZoom(this.map, bounds.zoom);
-
-        this.spinner = new LoadingOverlay(this.el.node());
 
         this.loadData();
     }
@@ -89,25 +76,12 @@ var MapPanel = function () {
     }, {
         key: "displayData",
         value: function displayData() {
-            var year = arguments.length <= 0 || arguments[0] === undefined ? new Date().getFullYear() : arguments[0];
-
-            year = year.toString();
-            var crimes = crimedata.all({
-                where: function where(crime) {
-                    return crime.year === year;
-                }
-            });
-
-            var crimePoints = crimes.map(function (crime) {
-                return {
-                    location: new google.maps.LatLng(parseFloat(crime.latitude), parseFloat(crime.longitude))
-                };
-            });
-
-            var heatmap = new google.maps.visualization.HeatmapLayer({
+            this.crimeMap.add(crimedata.all());
+            new google.maps.visualization.HeatmapLayer({
                 map: this.map,
-                data: crimePoints,
-                dissipating: true
+                data: crimedata.all().map(function (crime) {
+                    return new google.maps.LatLng(crime.latitude, crime.longitude);
+                })
             });
         }
     }]);
