@@ -1,15 +1,28 @@
 var d3 = require("d3");
 var _ = require("underscore");
+var constants = require("./constants.js");
 
 var MapPanel = require("./MapPanel.js");
 
-var map = new MapPanel({
-    el: "#map",
-    lat: 41.8339037,
-    lng: -87.872238,
-    bounds: {
-        min: new google.maps.LatLng(41.5, -88),
-        max: new google.maps.LatLng(42, -87.5),
-        zoom: [10, 21]
+function afterLoad() {
+    var map = new MapPanel({
+        el: "#map",
+        lat: (constants.map.lat.min + constants.map.lat.max) / 2,
+        lng: (constants.map.lng.min + constants.map.lng.max) / 2,
+        zoom: 10,
+        bounds: {
+            min: new google.maps.LatLng(constants.map.lat.min,
+                constants.map.lat.min),
+            max: new google.maps.LatLng(constants.map.lng.min,
+                constants.map.lng.min),
+            zoom: [constants.map.zoom.min, constants.map.zoom.max]
+        }
+    });
+}
+
+var interval = setInterval(function() {
+    if (document.readyState === "complete") {
+        afterLoad();
+        clearInterval(interval);
     }
-});
+}, 10);
