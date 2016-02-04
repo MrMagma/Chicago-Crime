@@ -4,7 +4,6 @@ var _ = require("underscore");
 var LoadingOverlay = require("./LoadingOverlay.js");
 var CrimeMap = require("./CrimeMap.js");
 var crimedata = require("./crimedata.js");
-var mapsutil = require("./mapsutil.js");
 var constants = require("./constants.js");
 
 class MapPanel {

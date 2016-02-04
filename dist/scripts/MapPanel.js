@@ -10,7 +10,6 @@ var _ = require("underscore");
 var LoadingOverlay = require("./LoadingOverlay.js");
 var CrimeMap = require("./CrimeMap.js");
 var crimedata = require("./crimedata.js");
-var mapsutil = require("./mapsutil.js");
 var constants = require("./constants.js");
 
 var MapPanel = function () {
@@ -50,6 +49,7 @@ var MapPanel = function () {
             iconCreateFunction: function iconCreateFunction(cluster) {
                 return L.divIcon({
                     className: "hide",
+                    // TODO (Joshua): This is very messy and stupid and needs to be fixed soon (tomorrow)
                     html: "<div class=\"crime-icon\" style=\"background-color: #" + cluster.getAllChildMarkers().reduce(function (pVal, cVal, i) {
                         if (i === 1) {
                             pVal = constants.colors[pVal.options.crimeType].fill;
