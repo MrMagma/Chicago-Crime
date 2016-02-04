@@ -11,6 +11,7 @@ var LoadingOverlay = require("./LoadingOverlay.js");
 var CrimeMap = require("./CrimeMap.js");
 var crimedata = require("./crimedata.js");
 var mapsutil = require("./mapsutil.js");
+var constants = require("./constants.js");
 
 var MapPanel = function () {
     function MapPanel() {
@@ -27,24 +28,40 @@ var MapPanel = function () {
         var el = cfg.el;
         var _cfg$bounds = cfg.bounds;
         var bounds = _cfg$bounds === undefined ? {
-            min: new google.maps.LatLng(-Infinity, -Infinity),
-            max: new google.maps.LatLng(Infinity, Infinity),
-            zoom: [10, 21]
+            southWest: L.latLng(-Infinity, -Infinity),
+            northEast: L.latLng(Infinity, Infinity),
+            zoom: {
+                min: 10,
+                max: 21
+            }
         } : _cfg$bounds;
 
-        this.el = d3.select(el);
-        this.map = new google.maps.Map(this.el.append("div").attr("class", "map-container").node(), {
-            center: { lat: lat, lng: lng },
-            zoom: zoom,
-            disableDefaultUI: true,
-            mapTypeId: google.maps.MapTypeId.ROADMAP
+        this.d3el = d3.select(el);
+        this.map = L.mapbox.map("map", "mapbox.streets", {
+            maxBounds: L.latLngBounds(bounds.southWest, bounds.northEast),
+            maxZoom: bounds.zoom.max,
+            minZoom: bounds.zoom.min
+        }).setView([lat, lng], zoom);
+        this.clusterer = new L.MarkerClusterGroup({
+            polygonOptions: {
+                fillColor: "rgba(0, 0, 0, 0)",
+                color: "rgba(0, 0, 0, 0)"
+            },
+            iconCreateFunction: function iconCreateFunction(cluster) {
+                return L.divIcon({
+                    className: "hide",
+                    html: "<div class=\"crime-icon\" style=\"background-color: #" + cluster.getAllChildMarkers().reduce(function (pVal, cVal, i) {
+                        if (i === 1) {
+                            pVal = constants.colors[pVal.options.crimeType].fill;
+                        }
+                        return (pVal + constants.colors[cVal.options.crimeType].fill) / 2;
+                    }).toString(16).slice(0, 6) + ";width: 24px;height: 24px;visibility: visible;\"></div>"
+                });
+            },
+
+            maxClusterRadius: 30
         });
-        this.spinner = new LoadingOverlay(this.el.node());
-        this.crimeMap = new CrimeMap(this.el.node());
-
-        mapsutil.boundMapPos(this.map, new google.maps.LatLngBounds(bounds.min, bounds.max));
-
-        mapsutil.boundMapZoom(this.map, bounds.zoom);
+        this.spinner = new LoadingOverlay(this.d3el.node());
 
         this.loadData();
     }
@@ -76,13 +93,41 @@ var MapPanel = function () {
     }, {
         key: "displayData",
         value: function displayData() {
-            this.crimeMap.add(crimedata.all());
-            new google.maps.visualization.HeatmapLayer({
-                map: this.map,
-                data: crimedata.all().map(function (crime) {
-                    return new google.maps.LatLng(crime.latitude, crime.longitude);
-                })
-            });
+            var crimes = crimedata.all();
+
+            var _iteratorNormalCompletion = true;
+            var _didIteratorError = false;
+            var _iteratorError = undefined;
+
+            try {
+                for (var _iterator = crimes[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                    var crime = _step.value;
+
+                    this.clusterer.addLayer(new L.Marker(L.latLng(crime.latitude, crime.longitude), {
+                        icon: L.divIcon({
+                            className: constants.css.classPrefix + "-" + crime.primary_type.replace(" ", "_") + " crime-icon",
+                            iconSize: new L.Point(18, 18)
+                        }),
+                        title: "Crime doesn't pay",
+                        crimeType: crime.primary_type
+                    }));
+                }
+            } catch (err) {
+                _didIteratorError = true;
+                _iteratorError = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion && _iterator.return) {
+                        _iterator.return();
+                    }
+                } finally {
+                    if (_didIteratorError) {
+                        throw _iteratorError;
+                    }
+                }
+            }
+
+            this.map.addLayer(this.clusterer);
         }
     }]);
 

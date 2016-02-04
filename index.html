@@ -4,6 +4,9 @@
         <meta charset="utf-8">
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
         <link rel="stylesheet" type="text/css" href="dist/browser/index.css">
+        <link href="https://api.mapbox.com/mapbox.js/v2.2.1/mapbox.css" rel="stylesheet"/>
+        <link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.css' rel='stylesheet' />
+<link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.Default.css' rel='stylesheet' />
     </head>
     <body>
         <div class="panel right"></div>
@@ -12,9 +15,8 @@
         <div class="panel main">
             <div class="map" id="map"></div>
         </div>
-        <script async defer
-            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAyRw10t0IinhC-UCpSEwSYyhbRbBrC25g&libraries=geometry,visualization">
-        </script>
+        <script src="https://api.mapbox.com/mapbox.js/v2.2.1/mapbox.js"></script>
+        <script src="https://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/leaflet.markercluster.js"></script>
         <script async defer src="./dist/browser/app.js"></script>
     </body>
 </html>

@@ -2,20 +2,25 @@
 
 var d3 = require("d3");
 var _ = require("underscore");
-var constants = require("./constants.js");
 
 var MapPanel = require("./MapPanel.js");
+var constants = require("./constants.js");
+
+L.mapbox.accessToken = "pk.eyJ1IjoibXJtYWdtYSIsImEiOiJjaWs3ZmI3YWYwMWZjcGlrc25uenkxeWoyIn0.dRTC3GgeeJLxvh5RrzBogw";
 
 function afterLoad() {
     var map = new MapPanel({
         el: "#map",
-        lat: (constants.map.lat.min + constants.map.lat.max) / 2,
-        lng: (constants.map.lng.min + constants.map.lng.max) / 2,
+        lat: (constants.map.southWest.lat + constants.map.northEast.lat) / 2,
+        lng: (constants.map.southWest.lng + constants.map.northEast.lng) / 2,
         zoom: 10,
         bounds: {
-            min: new google.maps.LatLng(constants.map.lat.min, constants.map.lat.min),
-            max: new google.maps.LatLng(constants.map.lng.min, constants.map.lng.min),
-            zoom: [constants.map.zoom.min, constants.map.zoom.max]
+            southWest: constants.map.southWest,
+            northEast: constants.map.northEast,
+            zoom: {
+                min: constants.map.zoom.min,
+                max: constants.map.zoom.max
+            }
         }
     });
 }
