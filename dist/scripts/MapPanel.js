@@ -6,11 +6,39 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 var d3 = require("d3");
 var _ = require("underscore");
+var tinycolor = require("tinycolor2");
 
 var LoadingOverlay = require("./LoadingOverlay.js");
 var CrimeMap = require("./CrimeMap.js");
 var crimedata = require("./crimedata.js");
 var constants = require("./constants.js");
+
+function iconCreator(cluster) {
+    var style = cluster.getAllChildMarkers().map(function (marker) {
+        return constants.colors[marker.options.crimeType];
+    }).reduce(function (pVal, cVal, i) {
+        return {
+            stroke: (pVal.stroke + cVal.stroke) / 2,
+            fill: (pVal.fill + cVal.fill) / 2
+        };
+    });
+
+    style.fill = tinycolor(Math.round(style.fill).toString(16)).toHexString();
+    style.stroke = tinycolor(style.fill);
+    if (style.stroke.isDark()) {
+        style.stroke.brighten(35);
+    } else {
+        style.stroke.desaturate(35);
+    }
+
+    var icon = L.divIcon({
+        className: "crime-icon",
+        iconSize: new L.Point(24, 24),
+        html: "<div class=\"crime-icon-inner\" style=\"\n            background-color: " + style.fill + ";\n            border: 0.2em solid " + style.stroke + ";\"></div>"
+    });
+
+    return icon;
+}
 
 var MapPanel = function () {
     function MapPanel() {
@@ -41,24 +69,13 @@ var MapPanel = function () {
             maxZoom: bounds.zoom.max,
             minZoom: bounds.zoom.min
         }).setView([lat, lng], zoom);
+
         this.clusterer = new L.MarkerClusterGroup({
             polygonOptions: {
                 fillColor: "rgba(0, 0, 0, 0)",
                 color: "rgba(0, 0, 0, 0)"
             },
-            iconCreateFunction: function iconCreateFunction(cluster) {
-                return L.divIcon({
-                    className: "hide",
-                    // TODO (Joshua): This is very messy and stupid and needs to be fixed soon (tomorrow)
-                    html: "<div class=\"crime-icon\" style=\"background-color: #" + cluster.getAllChildMarkers().reduce(function (pVal, cVal, i) {
-                        if (i === 1) {
-                            pVal = constants.colors[pVal.options.crimeType].fill;
-                        }
-                        return (pVal + constants.colors[cVal.options.crimeType].fill) / 2;
-                    }).toString(16).slice(0, 6) + ";width: 24px;height: 24px;visibility: visible;\"></div>"
-                });
-            },
-
+            iconCreateFunction: iconCreator,
             maxClusterRadius: 30
         });
         this.spinner = new LoadingOverlay(this.d3el.node());
