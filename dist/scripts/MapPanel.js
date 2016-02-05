@@ -4,12 +4,10 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var d3 = require("d3");
 var _ = require("underscore");
 var tinycolor = require("tinycolor2");
 
 var LoadingOverlay = require("./LoadingOverlay.js");
-var CrimeMap = require("./CrimeMap.js");
 var crimedata = require("./crimedata.js");
 var constants = require("./constants.js");
 
@@ -68,7 +66,7 @@ var MapPanel = function () {
             }
         } : _cfg$bounds;
 
-        this.d3el = d3.select(el);
+        this.el = document.getElementById(el);
         this.map = L.mapbox.map("map", "mapbox.streets", {
             maxBounds: L.latLngBounds(bounds.southWest, bounds.northEast),
             maxZoom: bounds.zoom.max,
@@ -83,7 +81,7 @@ var MapPanel = function () {
             iconCreateFunction: iconCreator,
             maxClusterRadius: 30
         });
-        this.spinner = new LoadingOverlay(this.d3el.node());
+        this.spinner = new LoadingOverlay(this.el);
 
         this.loadData();
     }

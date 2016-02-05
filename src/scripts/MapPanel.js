@@ -1,9 +1,7 @@
-var d3 = require("d3");
 var _ = require("underscore");
 var tinycolor = require("tinycolor2");
 
 var LoadingOverlay = require("./LoadingOverlay.js");
-var CrimeMap = require("./CrimeMap.js");
 var crimedata = require("./crimedata.js");
 var constants = require("./constants.js");
 
@@ -51,7 +49,7 @@ class MapPanel {
             }
         }} = cfg;
         
-        this.d3el = d3.select(el);
+        this.el = document.getElementById(el);
         this.map = L.mapbox.map("map", "mapbox.streets", {
             maxBounds: L.latLngBounds(bounds.southWest, bounds.northEast),
             maxZoom: bounds.zoom.max,
@@ -66,7 +64,7 @@ class MapPanel {
             iconCreateFunction: iconCreator,
             maxClusterRadius: 30
         });
-        this.spinner = new LoadingOverlay(this.d3el.node());       
+        this.spinner = new LoadingOverlay(this.el);       
         
         this.loadData();
     }

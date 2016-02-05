@@ -1,6 +1,5 @@
 "use strict";
 
-var d3 = require("d3");
 var _ = require("underscore");
 
 var MapPanel = require("./MapPanel.js");
@@ -10,7 +9,7 @@ L.mapbox.accessToken = "pk.eyJ1IjoibXJtYWdtYSIsImEiOiJjaWs3ZmI3YWYwMWZjcGlrc25ue
 
 function afterLoad() {
     var map = new MapPanel({
-        el: "#map",
+        el: "map",
         lat: (constants.map.southWest.lat + constants.map.northEast.lat) / 2,
         lng: (constants.map.southWest.lng + constants.map.northEast.lng) / 2,
         zoom: 10,
