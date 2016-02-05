@@ -8,7 +8,7 @@ var crimedata = require("./crimedata.js");
 var constants = require("./constants.js");
 
 function iconCreator(cluster) {
-    let style = cluster.getAllChildMarkers()
+    let {stroke, fill} = cluster.getAllChildMarkers()
         .map(marker => {
             return constants.colors[marker.options.crimeType];
         })
@@ -19,12 +19,12 @@ function iconCreator(cluster) {
             };
         });
     
-    style.fill = tinycolor(Math.round(style.fill).toString(16)).toHexString();
-    style.stroke = tinycolor(style.fill);
-    if (style.stroke.isDark()) {
-        style.stroke.brighten(35);
+    fill = tinycolor(Math.round(fill).toString(16)).toHexString();
+    stroke = tinycolor(fill);
+    if (stroke.isDark()) {
+        stroke.brighten(35);
     } else {
-        style.stroke.desaturate(35);
+        stroke.desaturate(35);
     }
     
     let sz = 24 * (1 + (cluster.getChildCount() / 200));
@@ -33,8 +33,8 @@ function iconCreator(cluster) {
         className: "crime-icon",
         iconSize: new L.Point(sz, sz),
         html: `<div class="crime-icon-inner" style="
-            background-color: ${style.fill};
-            border: 0.2em solid ${style.stroke};"></div>`
+            background-color: ${fill};
+            border: 0.2em solid ${stroke};"></div>`
     });
     
     return icon;

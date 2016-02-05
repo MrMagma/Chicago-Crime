@@ -14,7 +14,7 @@ var crimedata = require("./crimedata.js");
 var constants = require("./constants.js");
 
 function iconCreator(cluster) {
-    var style = cluster.getAllChildMarkers().map(function (marker) {
+    var _cluster$getAllChildM = cluster.getAllChildMarkers().map(function (marker) {
         return constants.colors[marker.options.crimeType];
     }).reduce(function (pVal, cVal, i) {
         return {
@@ -23,12 +23,15 @@ function iconCreator(cluster) {
         };
     });
 
-    style.fill = tinycolor(Math.round(style.fill).toString(16)).toHexString();
-    style.stroke = tinycolor(style.fill);
-    if (style.stroke.isDark()) {
-        style.stroke.brighten(35);
+    var stroke = _cluster$getAllChildM.stroke;
+    var fill = _cluster$getAllChildM.fill;
+
+    fill = tinycolor(Math.round(fill).toString(16)).toHexString();
+    stroke = tinycolor(fill);
+    if (stroke.isDark()) {
+        stroke.brighten(35);
     } else {
-        style.stroke.desaturate(35);
+        stroke.desaturate(35);
     }
 
     var sz = 24 * (1 + cluster.getChildCount() / 200);
@@ -36,7 +39,7 @@ function iconCreator(cluster) {
     var icon = L.divIcon({
         className: "crime-icon",
         iconSize: new L.Point(sz, sz),
-        html: "<div class=\"crime-icon-inner\" style=\"\n            background-color: " + style.fill + ";\n            border: 0.2em solid " + style.stroke + ";\"></div>"
+        html: "<div class=\"crime-icon-inner\" style=\"\n            background-color: " + fill + ";\n            border: 0.2em solid " + stroke + ";\"></div>"
     });
 
     return icon;

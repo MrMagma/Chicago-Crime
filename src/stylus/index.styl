@@ -1,17 +1,39 @@
 .panel
+    control-panel-w = 20em
+    nav-panel-h = 4em
+    position absolute
     &.main
-        position absolute
-        top 0
-        left 10em
-        bottom 5em
-        right 10em
+        top nav-panel-h
+        left control-panel-w
+        bottom 0
+        right 0
+        z-index 0
         .map
             position absolute
             top 0
             left 0
             bottom 0
             right 0
-
+    &.controls
+        top nav-panel-h
+        left 0
+        bottom 0
+        width control-panel-w
+        box-shadow 0 0 1em 0 #000
+        background-color #FFF
+        z-index 10
+    &.nav
+        top 0
+        left 0
+        right 0
+        height nav-panel-h
+        box-shadow 0 0 1em 0 #000
+        background-color #FFF
+        z-index 100
+        font-family sans-serif
+        text-align center
+        line-height 1em
+        
 .loading-overlay
     position absolute
     top 0
