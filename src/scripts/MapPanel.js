@@ -27,9 +27,11 @@ function iconCreator(cluster) {
         style.stroke.desaturate(35);
     }
     
+    let sz = 24 * (1 + (cluster.getChildCount() / 200));
+    
     let icon = L.divIcon({
         className: "crime-icon",
-        iconSize: new L.Point(24, 24),
+        iconSize: new L.Point(sz, sz),
         html: `<div class="crime-icon-inner" style="
             background-color: ${style.fill};
             border: 0.2em solid ${style.stroke};"></div>`
