@@ -1,12 +1,19 @@
+*
+    margin 0
+    padding 0
+    
+body
+    font-family sans-serif
+
 .panel
-    control-panel-w = 20em
-    nav-panel-h = 4em
+    control-panel-w = 25em
     position absolute
+    box-shadow 0 0 1em 0 #000
     &.main
-        top nav-panel-h
-        left control-panel-w
+        top 0
+        left 0
         bottom 0
-        right 0
+        right control-panel-w
         z-index 0
         .map
             position absolute
@@ -15,36 +22,83 @@
             bottom 0
             right 0
     &.controls
-        top nav-panel-h
-        left 0
+        top 0
+        right 0
         bottom 0
         width control-panel-w
-        box-shadow 0 0 1em 0 #000
         background-color #FFF
         z-index 10
-    &.nav
+
+.sub-panel
+    border-display = 1px solid rgba(0, 0, 0, 0.38)
+    graph-height = 40%
+    position absolute
+    &.search-box
         top 0
         left 0
         right 0
-        height nav-panel-h
-        box-shadow 0 0 1em 0 #000
-        background-color #FFF
-        z-index 100
-        font-family sans-serif
-        text-align center
-        line-height 1em
+        height 3em
+        border-bottom border-display
+    &.display
+        top 3em
+        left 0
+        bottom 0
+        right 0
+    &.graph
+        top 0
+        left 0
+        right 0
+        height graph-height
+        border-bottom border-display
+    &.controls
+        top graph-height
+        left 0
+        bottom 0
+        right 0
+    &.graph-display
+        top 0
+        left 0
+        bottom 3em
+        right 0
+        border-bottom border-display
+    &.graph-controls
+        left 0
+        bottom 0
+        right 0
+        height 3em
+    
         
 .loading-overlay
+    opacity-fade-time = 0.3s
     position absolute
     top 0
     left 0
     bottom 0
     right 0
     background rgba(255, 255, 255, 0.7)
-    transition opacity 0.3s ease
+    transition opacity opacity-fade-time ease
     display none
     transform translateZ(0px)
     z-index 1
+    .loading-message
+        font-size 2em
+        text-align center
+        display inline-block
+        position absolute
+        bottom 0
+        left 0
+        right 0
+        height 33%
+        line-height 2em
+    &.before-script-load
+        display block
+        opacity 1
+        animation-name fadein
+        animation-duration 1s
+        animation-timing-function ease
+        animation-iteration-count 1
+        
+        
 
 .spinner
     animation-duration 1s
@@ -87,3 +141,11 @@
         transform rotate(0deg)
     to
         transform rotate(360deg)
+
+@keyframes fadein
+    from
+        opacity 0
+    50%
+        opacity 0
+    80%
+        opacity 1

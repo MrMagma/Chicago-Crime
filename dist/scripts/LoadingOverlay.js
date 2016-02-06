@@ -6,18 +6,24 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 var LoadingOverlay = function () {
     function LoadingOverlay(el) {
+        var message = arguments.length <= 1 || arguments[1] === undefined ? "Loading..." : arguments[1];
+
         _classCallCheck(this, LoadingOverlay);
 
         this.el = document.createElement("div");
         this.spinContainer = document.createElement("div");
         this.spinner = document.createElement("i");
+        this.messageEl = document.createElement("p");
 
         this.el.className = "loading-overlay";
         this.spinContainer.className = "spinner";
         this.spinner.className = "fa fa-circle-o-notch";
+        this.messageEl.className = "loading-message";
+        this.messageEl.textContent = message.toString();
 
         this.spinContainer.appendChild(this.spinner);
         this.el.appendChild(this.spinContainer);
+        this.el.appendChild(this.messageEl);
 
         el.appendChild(this.el);
     }

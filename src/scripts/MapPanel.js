@@ -20,9 +20,9 @@ function iconCreator(cluster) {
     fill = tinycolor(Math.round(fill).toString(16)).toHexString();
     stroke = tinycolor(fill);
     if (stroke.isDark()) {
-        stroke.brighten(35);
+        stroke.brighten(35).toHexString();
     } else {
-        stroke.desaturate(35);
+        stroke.desaturate(35).toHexString();
     }
     
     let sz = 24 * (1 + (cluster.getChildCount() / 200));
@@ -64,7 +64,7 @@ class MapPanel {
             iconCreateFunction: iconCreator,
             maxClusterRadius: 30
         });
-        this.spinner = new LoadingOverlay(this.el);       
+        this.spinner = new LoadingOverlay(this.el, "Fetching data. Please wait...");       
         
         this.loadData();
     }

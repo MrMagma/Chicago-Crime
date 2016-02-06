@@ -2,19 +2,32 @@
 <html>
     <head>
         <meta charset="utf-8">
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
-        <link rel="stylesheet" type="text/css" href="dist/browser/index.css">
+        <!-- Importing all of font awesome just for a spinner makes load speeds sad -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css"/>
+        <link rel="stylesheet" type="text/css" href="dist/browser/index.css"/>
         <link href="https://api.mapbox.com/mapbox.js/v2.2.1/mapbox.css" rel="stylesheet"/>
-        <link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.css' rel='stylesheet' />
-<link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.Default.css' rel='stylesheet' />
+        <link href="https://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.css" rel="stylesheet"/>
+        <link href="https://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/MarkerCluster.Default.css" rel="stylesheet"/>
     </head>
     <body>
-        <div class="panel nav">
-            <h1>Chicago Crime Visualization</h1>
+        <div class="panel controls">
+            <div class="sub-panel search-box">Crime Search by Address Box</div>
+            <div class="sub-panel display">
+                <div class="sub-panel graph">
+                    <div class="sub-panel graph-display">Graph Display</div>
+                    <div class="sub-panel graph-controls">Graph Controls</div>
+                </div>
+                <div class="sub-panel controls">General Controls</div>
+            </div>
         </div>
-        <div class="panel controls"></div>
         <div class="panel main">
             <div class="map" id="map"></div>
+            <div class="loading-overlay before-script-load">
+                <div class="spinner">
+                    <i class="fa fa-circle-o-notch"></i>
+                </div>
+                <p class="loading-message">Please wait while the map loads...</p>
+            </div>
         </div>
         <script src="https://api.mapbox.com/mapbox.js/v2.2.1/mapbox.js"></script>
         <script src="https://api.mapbox.com/mapbox.js/plugins/leaflet-markercluster/v0.4.0/leaflet.markercluster.js"></script>
