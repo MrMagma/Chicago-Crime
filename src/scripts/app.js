@@ -6,7 +6,6 @@ import constants from "./constants.js";
 function afterLoad() {
     L.mapbox.accessToken = "pk.eyJ1IjoibXJtYWdtYSIsImEiOiJjaWs3ZmI3YWYwMWZjcGlrc25uenkxeWoyIn0.dRTC3GgeeJLxvh5RrzBogw";
     var map = new MapPanel({
-        el: "map",
         lat: (constants.map.southWest.lat + constants.map.northEast.lat) / 2,
         lng: (constants.map.southWest.lng + constants.map.northEast.lng) / 2,
         zoom: 10,

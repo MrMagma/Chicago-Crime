@@ -1,10 +1,10 @@
 "use strict";
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 var _underscore = require("underscore");
 
@@ -13,6 +13,10 @@ var _underscore2 = _interopRequireDefault(_underscore);
 var _tinycolor = require("tinycolor2");
 
 var _tinycolor2 = _interopRequireDefault(_tinycolor);
+
+var _Component2 = require("./Component.js");
+
+var _Component3 = _interopRequireDefault(_Component2);
 
 var _LoadingOverlay = require("./LoadingOverlay.js");
 
@@ -30,6 +34,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
 function iconCreator(cluster) {
     var _cluster$getAllChildM = cluster.getAllChildMarkers().map(function (marker) {
         return _constants2.default.colors[marker.options.crimeType];
@@ -42,6 +50,7 @@ function iconCreator(cluster) {
 
     var stroke = _cluster$getAllChildM.stroke;
     var fill = _cluster$getAllChildM.fill;
+
 
     fill = (0, _tinycolor2.default)(Math.round(fill).toString(16)).toHexString();
     stroke = (0, _tinycolor2.default)(fill);
@@ -62,11 +71,15 @@ function iconCreator(cluster) {
     return icon;
 }
 
-var MapPanel = function () {
+var MapPanel = function (_Component) {
+    _inherits(MapPanel, _Component);
+
     function MapPanel() {
         var cfg = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
 
         _classCallCheck(this, MapPanel);
+
+        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(MapPanel).call(this, cfg));
 
         var _cfg$lat = cfg.lat;
         var lat = _cfg$lat === undefined ? 10 : _cfg$lat;
@@ -74,7 +87,8 @@ var MapPanel = function () {
         var lng = _cfg$lng === undefined ? 10 : _cfg$lng;
         var _cfg$zoom = cfg.zoom;
         var zoom = _cfg$zoom === undefined ? 11 : _cfg$zoom;
-        var el = cfg.el;
+        var _cfg$el = cfg.el;
+        var el = _cfg$el === undefined ? "map" : _cfg$el;
         var _cfg$bounds = cfg.bounds;
         var bounds = _cfg$bounds === undefined ? {
             southWest: L.latLng(-Infinity, -Infinity),
@@ -85,14 +99,15 @@ var MapPanel = function () {
             }
         } : _cfg$bounds;
 
-        this.el = document.getElementById(el);
-        this.map = L.mapbox.map("map", "mapbox.streets", {
+
+        _this.domNode = document.getElementById(el);
+        _this.map = L.mapbox.map(_this.domNode, "mapbox.streets", {
             maxBounds: L.latLngBounds(bounds.southWest, bounds.northEast),
             maxZoom: bounds.zoom.max,
             minZoom: bounds.zoom.min
         }).setView([lat, lng], zoom);
 
-        this.clusterer = new L.MarkerClusterGroup({
+        _this.clusterer = new L.MarkerClusterGroup({
             polygonOptions: {
                 fillColor: "rgba(0, 0, 0, 0)",
                 color: "rgba(0, 0, 0, 0)"
@@ -100,15 +115,21 @@ var MapPanel = function () {
             iconCreateFunction: iconCreator,
             maxClusterRadius: 30
         });
-        this.spinner = new _LoadingOverlay2.default(this.el, "Fetching data. Please wait...");
 
-        this.loadData();
+        _this.spinner = new _LoadingOverlay2.default({
+            message: "Fetching data. Please wait..."
+        });
+
+        _this.appendChild(_this.spinner);
+
+        _this.loadData();
+        return _this;
     }
 
     _createClass(MapPanel, [{
         key: "loadData",
         value: function loadData() {
-            var _this = this;
+            var _this2 = this;
 
             var year = new Date().getFullYear();
             if (!_crimedata2.default.hasYearLoaded(year)) {
@@ -118,11 +139,11 @@ var MapPanel = function () {
                     }
                     // If our data is taking more than 1/2 second to load let people
                     // know that we're actually doing something
-                    var spinTimer = setTimeout(_this.spinner.show.bind(_this.spinner), 500);
+                    var spinTimer = setTimeout(_this2.spinner.show.bind(_this2.spinner), 500);
                     _crimedata2.default.onYearLoad(year, function () {
                         clearTimeout(spinTimer);
-                        _this.spinner.hide();
-                        _this.displayData();
+                        _this2.spinner.hide();
+                        _this2.displayData();
                     });
                 })();
             } else {
@@ -171,6 +192,6 @@ var MapPanel = function () {
     }]);
 
     return MapPanel;
-}();
+}(_Component3.default);
 
 exports.default = MapPanel;

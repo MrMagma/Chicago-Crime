@@ -1,30 +1,32 @@
-class LoadingOverlay {
-    constructor(el, message = "Loading...") {
-        this.el = document.createElement("div");
+import Component from "./Component.js";
+
+class LoadingOverlay extends Component {
+    constructor(data) {
+        super(data);
+        let {message = "", el} = data;
+        this.domNode = document.createElement("div");
         this.spinContainer = document.createElement("div");
         this.spinner = document.createElement("i");
         this.messageEl = document.createElement("p");
         
-        this.el.className = "loading-overlay";
+        this.domNode.className = "loading-overlay";
         this.spinContainer.className = "spinner";
         this.spinner.className = "fa fa-circle-o-notch";
         this.messageEl.className = "loading-message";
         this.messageEl.textContent = message.toString();
         
         this.spinContainer.appendChild(this.spinner);
-        this.el.appendChild(this.spinContainer);
-        this.el.appendChild(this.messageEl);
-        
-        el.appendChild(this.el);
+        this.domNode.appendChild(this.spinContainer);
+        this.domNode.appendChild(this.messageEl);
     }
     show() {
-        this.el.style.display = "block";
-        this.el.style.opacity = 1.0;
+        this.domNode.style.display = "block";
+        this.domNode.style.opacity = 1.0;
     }
     hide() {
-        this.el.style.opacity = 0;
+        this.domNode.style.opacity = 0;
         setTimeout(() => {
-            this.el.style.display = "none";
+            this.domNode.style.display = "none";
         }, 300);
     }
 }

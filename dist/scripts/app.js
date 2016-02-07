@@ -15,7 +15,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function afterLoad() {
     L.mapbox.accessToken = "pk.eyJ1IjoibXJtYWdtYSIsImEiOiJjaWs3ZmI3YWYwMWZjcGlrc25uenkxeWoyIn0.dRTC3GgeeJLxvh5RrzBogw";
     var map = new _MapPanel2.default({
-        el: "map",
         lat: (_constants2.default.map.southWest.lat + _constants2.default.map.northEast.lat) / 2,
         lng: (_constants2.default.map.southWest.lng + _constants2.default.map.northEast.lng) / 2,
         zoom: 10,

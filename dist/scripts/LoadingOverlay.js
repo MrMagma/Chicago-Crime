@@ -1,56 +1,71 @@
 "use strict";
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _Component2 = require("./Component.js");
+
+var _Component3 = _interopRequireDefault(_Component2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var LoadingOverlay = function () {
-    function LoadingOverlay(el) {
-        var message = arguments.length <= 1 || arguments[1] === undefined ? "Loading..." : arguments[1];
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var LoadingOverlay = function (_Component) {
+    _inherits(LoadingOverlay, _Component);
+
+    function LoadingOverlay(data) {
         _classCallCheck(this, LoadingOverlay);
 
-        this.el = document.createElement("div");
-        this.spinContainer = document.createElement("div");
-        this.spinner = document.createElement("i");
-        this.messageEl = document.createElement("p");
+        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(LoadingOverlay).call(this, data));
 
-        this.el.className = "loading-overlay";
-        this.spinContainer.className = "spinner";
-        this.spinner.className = "fa fa-circle-o-notch";
-        this.messageEl.className = "loading-message";
-        this.messageEl.textContent = message.toString();
+        var _data$message = data.message;
+        var message = _data$message === undefined ? "" : _data$message;
+        var el = data.el;
 
-        this.spinContainer.appendChild(this.spinner);
-        this.el.appendChild(this.spinContainer);
-        this.el.appendChild(this.messageEl);
+        _this.domNode = document.createElement("div");
+        _this.spinContainer = document.createElement("div");
+        _this.spinner = document.createElement("i");
+        _this.messageEl = document.createElement("p");
 
-        el.appendChild(this.el);
+        _this.domNode.className = "loading-overlay";
+        _this.spinContainer.className = "spinner";
+        _this.spinner.className = "fa fa-circle-o-notch";
+        _this.messageEl.className = "loading-message";
+        _this.messageEl.textContent = message.toString();
+
+        _this.spinContainer.appendChild(_this.spinner);
+        _this.domNode.appendChild(_this.spinContainer);
+        _this.domNode.appendChild(_this.messageEl);
+        return _this;
     }
 
     _createClass(LoadingOverlay, [{
         key: "show",
         value: function show() {
-            this.el.style.display = "block";
-            this.el.style.opacity = 1.0;
+            this.domNode.style.display = "block";
+            this.domNode.style.opacity = 1.0;
         }
     }, {
         key: "hide",
         value: function hide() {
-            var _this = this;
+            var _this2 = this;
 
-            this.el.style.opacity = 0;
+            this.domNode.style.opacity = 0;
             setTimeout(function () {
-                _this.el.style.display = "none";
+                _this2.domNode.style.display = "none";
             }, 300);
         }
     }]);
 
     return LoadingOverlay;
-}();
+}(_Component3.default);
 
 exports.default = LoadingOverlay;

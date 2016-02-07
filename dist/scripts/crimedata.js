@@ -128,6 +128,7 @@ var datautil = {
             return true;
         } : _query$where;
 
+
         return crimedata.filter(where);
     }
 };

@@ -1,6 +1,7 @@
 import _ from "underscore";
 import tinycolor from "tinycolor2";
 
+import Component from "./Component.js";
 import LoadingOverlay from "./LoadingOverlay.js";
 import crimedata from "./crimedata.js";
 import constants from "./constants.js";
@@ -38,9 +39,10 @@ function iconCreator(cluster) {
     return icon;
 }
 
-class MapPanel {
+class MapPanel extends Component {
     constructor(cfg = {}) {
-        let {lat = 10, lng = 10, zoom = 11, el, bounds = {
+        super(cfg);
+        let {lat = 10, lng = 10, zoom = 11, el = "map", bounds = {
             southWest: L.latLng(-Infinity, -Infinity),
             northEast: L.latLng(Infinity, Infinity),
             zoom: {
@@ -49,8 +51,8 @@ class MapPanel {
             }
         }} = cfg;
         
-        this.el = document.getElementById(el);
-        this.map = L.mapbox.map("map", "mapbox.streets", {
+        this.domNode = document.getElementById(el);
+        this.map = L.mapbox.map(this.domNode, "mapbox.streets", {
             maxBounds: L.latLngBounds(bounds.southWest, bounds.northEast),
             maxZoom: bounds.zoom.max,
             minZoom: bounds.zoom.min
@@ -64,7 +66,12 @@ class MapPanel {
             iconCreateFunction: iconCreator,
             maxClusterRadius: 30
         });
-        this.spinner = new LoadingOverlay(this.el, "Fetching data. Please wait...");       
+        
+        this.spinner = new LoadingOverlay({
+            message: "Fetching data. Please wait..."
+        });
+        
+        this.appendChild(this.spinner);
         
         this.loadData();
     }
