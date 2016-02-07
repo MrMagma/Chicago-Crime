@@ -1,9 +1,9 @@
-var _ = require("underscore");
-var tinycolor = require("tinycolor2");
+import _ from "underscore";
+import tinycolor from "tinycolor2";
 
-var LoadingOverlay = require("./LoadingOverlay.js");
-var crimedata = require("./crimedata.js");
-var constants = require("./constants.js");
+import LoadingOverlay from "./LoadingOverlay.js";
+import crimedata from "./crimedata.js";
+import constants from "./constants.js";
 
 function iconCreator(cluster) {
     let {stroke, fill} = cluster.getAllChildMarkers()
@@ -106,4 +106,4 @@ class MapPanel {
     }
 }
 
-module.exports = MapPanel;
+export default MapPanel;

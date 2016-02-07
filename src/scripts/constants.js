@@ -29,7 +29,7 @@ var crimeColors = {
     }
 };
 
-module.exports = {
+export default {
     map: {
         southWest: {
             lat: 41.5,

@@ -1,4 +1,4 @@
-let _ = require("underscore");
+import _ from "underscore";
 
 function parseURL(url) {
     var urlDat = url.match(/([^?]+)(?:\?(.+)){0,1}/);
@@ -82,4 +82,4 @@ class JSONRequest {
     }
 }
 
-module.exports = JSONRequest;
+export default JSONRequest;

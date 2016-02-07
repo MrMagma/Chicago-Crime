@@ -1,6 +1,6 @@
-var _ = require("underscore");
+import _ from "underscore";
 
-var JSONRequest = require("./JSONRequest.js");
+import JSONRequest from "./JSONRequest.js";
 
 let crimedata = [];
 
@@ -74,4 +74,4 @@ let datautil = {
 
 datautil.loadYear((new Date()).getFullYear());
 
-module.exports = datautil;
+export default datautil;

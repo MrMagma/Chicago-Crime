@@ -1,4 +1,4 @@
-var _ = require("underscore");
+import _ from "underscore";
 
 let storageKey = "chicagoCrimePreferences";
 
@@ -52,4 +52,4 @@ window.addEventListener("beforeunload", function() {
     localStorage.setItem(storageKey, JSON.stringify(settings));
 });
 
-module.exports = settingsutil;
+export default settingsutil;

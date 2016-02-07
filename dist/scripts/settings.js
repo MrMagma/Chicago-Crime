@@ -1,6 +1,14 @@
 "use strict";
 
-var _ = require("underscore");
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _underscore = require("underscore");
+
+var _underscore2 = _interopRequireDefault(_underscore);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var storageKey = "chicagoCrimePreferences";
 
@@ -16,7 +24,7 @@ var settingsutil = {
     setPref: function setPref(name, val) {
         settings[name] = val;
 
-        if (!_.isArray(callbacks[name])) {
+        if (!_underscore2.default.isArray(callbacks[name])) {
             callbacks[name] = [];
         }
 
@@ -55,14 +63,14 @@ var settingsutil = {
         }
     },
     onPrefChange: function onPrefChange(name, cb) {
-        if (!_.isFunction(cb) || !_.isArray(cb)) {
+        if (!_underscore2.default.isFunction(cb) || !_underscore2.default.isArray(cb)) {
             return;
         }
 
-        if (!_.isArray(cb)) {
+        if (!_underscore2.default.isArray(cb)) {
             cb = [cb];
         }
-        cb = cb.filter(_.isFunction);
+        cb = cb.filter(_underscore2.default.isFunction);
 
         if (!callbacks[name]) {
             callbacks[name] = [];
@@ -75,4 +83,4 @@ window.addEventListener("beforeunload", function () {
     localStorage.setItem(storageKey, JSON.stringify(settings));
 });
 
-module.exports = settingsutil;
+exports.default = settingsutil;

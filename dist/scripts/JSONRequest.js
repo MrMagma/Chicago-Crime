@@ -4,9 +4,17 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
 
-var _ = require("underscore");
+var _underscore = require("underscore");
+
+var _underscore2 = _interopRequireDefault(_underscore);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function parseURL(url) {
     var urlDat = url.match(/([^?]+)(?:\?(.+)){0,1}/);
@@ -104,7 +112,7 @@ var JSONRequest = function () {
         var urlParams = _parseURL.urlParams;
 
         this.url = address;
-        this.params = _.extendOwn(params, urlParams);
+        this.params = _underscore2.default.extendOwn(params, urlParams);
         this.jsonp = /\.jsonp$/.test(this.url) || jsonp;
         this.onload = onload;
         this.method = method;
@@ -146,4 +154,4 @@ var JSONRequest = function () {
     return JSONRequest;
 }();
 
-module.exports = JSONRequest;
+exports.default = JSONRequest;

@@ -1,23 +1,30 @@
 "use strict";
 
-var _ = require("underscore");
+require("underscore");
 
-var MapPanel = require("./MapPanel.js");
-var constants = require("./constants.js");
+var _MapPanel = require("./MapPanel.js");
+
+var _MapPanel2 = _interopRequireDefault(_MapPanel);
+
+var _constants = require("./constants.js");
+
+var _constants2 = _interopRequireDefault(_constants);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function afterLoad() {
     L.mapbox.accessToken = "pk.eyJ1IjoibXJtYWdtYSIsImEiOiJjaWs3ZmI3YWYwMWZjcGlrc25uenkxeWoyIn0.dRTC3GgeeJLxvh5RrzBogw";
-    var map = new MapPanel({
+    var map = new _MapPanel2.default({
         el: "map",
-        lat: (constants.map.southWest.lat + constants.map.northEast.lat) / 2,
-        lng: (constants.map.southWest.lng + constants.map.northEast.lng) / 2,
+        lat: (_constants2.default.map.southWest.lat + _constants2.default.map.northEast.lat) / 2,
+        lng: (_constants2.default.map.southWest.lng + _constants2.default.map.northEast.lng) / 2,
         zoom: 10,
         bounds: {
-            southWest: constants.map.southWest,
-            northEast: constants.map.northEast,
+            southWest: _constants2.default.map.southWest,
+            northEast: _constants2.default.map.northEast,
             zoom: {
-                min: constants.map.zoom.min,
-                max: constants.map.zoom.max
+                min: _constants2.default.map.zoom.min,
+                max: _constants2.default.map.zoom.max
             }
         }
     });

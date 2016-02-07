@@ -1,5 +1,8 @@
 "use strict";
 
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
 var crimeColors = {
     property: {
         fill: 0x4CAF50,
@@ -31,7 +34,7 @@ var crimeColors = {
     }
 };
 
-module.exports = {
+exports.default = {
     map: {
         southWest: {
             lat: 41.5,

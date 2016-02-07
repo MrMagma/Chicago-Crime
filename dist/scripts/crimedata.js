@@ -1,8 +1,18 @@
 "use strict";
 
-var _ = require("underscore");
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
 
-var JSONRequest = require("./JSONRequest.js");
+var _underscore = require("underscore");
+
+var _underscore2 = _interopRequireDefault(_underscore);
+
+var _JSONRequest = require("./JSONRequest.js");
+
+var _JSONRequest2 = _interopRequireDefault(_JSONRequest);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var crimedata = [];
 
@@ -18,19 +28,19 @@ var datautil = {
         return requested[year];
     },
     onYearLoad: function onYearLoad(year, cb) {
-        if (!_.isFunction(cb) && !_.isArray(cb)) {
+        if (!_underscore2.default.isFunction(cb) && !_underscore2.default.isArray(cb)) {
             return;
         }
 
-        if (!_.isArray(cb)) {
+        if (!_underscore2.default.isArray(cb)) {
             cb = [cb];
         }
 
         cb = cb.filter(function (val) {
-            return _.isFunction(val);
+            return _underscore2.default.isFunction(val);
         });
 
-        if (!_.isArray(callbacks[year])) {
+        if (!_underscore2.default.isArray(callbacks[year])) {
             callbacks[year] = [];
         }
         callbacks[year].push.apply(callbacks[year], cb);
@@ -64,11 +74,11 @@ var datautil = {
     },
     loadYear: function loadYear(year) {
         if (!loaded[year] && year >= 2001) {
-            if (!_.isArray(callbacks[year])) {
+            if (!_underscore2.default.isArray(callbacks[year])) {
                 callbacks[year] = [];
             }
 
-            var req = new JSONRequest({
+            var req = new _JSONRequest2.default({
                 url: "https://data.cityofchicago.org/resource/ijzp-q8t2.json",
                 params: {
                     year: year
@@ -77,7 +87,7 @@ var datautil = {
 
             req.onload = function (json) {
                 crimedata.push.apply(crimedata, json.filter(function (val) {
-                    return _.isString(val.latitude) && _.isString(val.longitude);
+                    return _underscore2.default.isString(val.latitude) && _underscore2.default.isString(val.longitude);
                 }));
                 loaded = true;
                 var _iteratorNormalCompletion2 = true;
@@ -124,4 +134,4 @@ var datautil = {
 
 datautil.loadYear(new Date().getFullYear());
 
-module.exports = datautil;
+exports.default = datautil;

@@ -1,7 +1,7 @@
-var _ = require("underscore");
+import "underscore";
 
-var MapPanel = require("./MapPanel.js");
-var constants = require("./constants.js");
+import MapPanel from "./MapPanel.js";
+import constants from "./constants.js";
 
 function afterLoad() {
     L.mapbox.accessToken = "pk.eyJ1IjoibXJtYWdtYSIsImEiOiJjaWs3ZmI3YWYwMWZjcGlrc25uenkxeWoyIn0.dRTC3GgeeJLxvh5RrzBogw";

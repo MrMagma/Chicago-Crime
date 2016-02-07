@@ -2,18 +2,37 @@
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _underscore = require("underscore");
+
+var _underscore2 = _interopRequireDefault(_underscore);
+
+var _tinycolor = require("tinycolor2");
+
+var _tinycolor2 = _interopRequireDefault(_tinycolor);
+
+var _LoadingOverlay = require("./LoadingOverlay.js");
+
+var _LoadingOverlay2 = _interopRequireDefault(_LoadingOverlay);
+
+var _crimedata = require("./crimedata.js");
+
+var _crimedata2 = _interopRequireDefault(_crimedata);
+
+var _constants = require("./constants.js");
+
+var _constants2 = _interopRequireDefault(_constants);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var _ = require("underscore");
-var tinycolor = require("tinycolor2");
-
-var LoadingOverlay = require("./LoadingOverlay.js");
-var crimedata = require("./crimedata.js");
-var constants = require("./constants.js");
 
 function iconCreator(cluster) {
     var _cluster$getAllChildM = cluster.getAllChildMarkers().map(function (marker) {
-        return constants.colors[marker.options.crimeType];
+        return _constants2.default.colors[marker.options.crimeType];
     }).reduce(function (pVal, cVal, i) {
         return {
             stroke: (pVal.stroke + cVal.stroke) / 2,
@@ -24,8 +43,8 @@ function iconCreator(cluster) {
     var stroke = _cluster$getAllChildM.stroke;
     var fill = _cluster$getAllChildM.fill;
 
-    fill = tinycolor(Math.round(fill).toString(16)).toHexString();
-    stroke = tinycolor(fill);
+    fill = (0, _tinycolor2.default)(Math.round(fill).toString(16)).toHexString();
+    stroke = (0, _tinycolor2.default)(fill);
     if (stroke.isDark()) {
         stroke.brighten(35).toHexString();
     } else {
@@ -81,7 +100,7 @@ var MapPanel = function () {
             iconCreateFunction: iconCreator,
             maxClusterRadius: 30
         });
-        this.spinner = new LoadingOverlay(this.el, "Fetching data. Please wait...");
+        this.spinner = new _LoadingOverlay2.default(this.el, "Fetching data. Please wait...");
 
         this.loadData();
     }
@@ -92,15 +111,15 @@ var MapPanel = function () {
             var _this = this;
 
             var year = new Date().getFullYear();
-            if (!crimedata.hasYearLoaded(year)) {
+            if (!_crimedata2.default.hasYearLoaded(year)) {
                 (function () {
-                    if (!crimedata.isYearRequested(year)) {
-                        crimedata.loadYear(year);
+                    if (!_crimedata2.default.isYearRequested(year)) {
+                        _crimedata2.default.loadYear(year);
                     }
                     // If our data is taking more than 1/2 second to load let people
                     // know that we're actually doing something
                     var spinTimer = setTimeout(_this.spinner.show.bind(_this.spinner), 500);
-                    crimedata.onYearLoad(year, function () {
+                    _crimedata2.default.onYearLoad(year, function () {
                         clearTimeout(spinTimer);
                         _this.spinner.hide();
                         _this.displayData();
@@ -113,7 +132,7 @@ var MapPanel = function () {
     }, {
         key: "displayData",
         value: function displayData() {
-            var crimes = crimedata.all();
+            var crimes = _crimedata2.default.all();
 
             var _iteratorNormalCompletion = true;
             var _didIteratorError = false;
@@ -125,7 +144,7 @@ var MapPanel = function () {
 
                     this.clusterer.addLayer(new L.Marker(L.latLng(crime.latitude, crime.longitude), {
                         icon: L.divIcon({
-                            className: constants.css.classPrefix + "-" + crime.primary_type.replace(" ", "_") + " crime-icon",
+                            className: _constants2.default.css.classPrefix + "-" + crime.primary_type.replace(" ", "_") + " crime-icon",
                             iconSize: new L.Point(18, 18)
                         }),
                         title: "Crime doesn't pay",
@@ -154,4 +173,4 @@ var MapPanel = function () {
     return MapPanel;
 }();
 
-module.exports = MapPanel;
+exports.default = MapPanel;
