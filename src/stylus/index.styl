@@ -1,3 +1,18 @@
+border-display = 1px solid rgba(0, 0, 0, 0.12)
+
+aspect-ratio(width, height)
+    position relative
+    &:before
+        display block
+        content ""
+        padding-top (height / width) * 100%
+    > .content
+        position absolute
+        top 0
+        left 0
+        right 0
+        bottom 0
+
 *
     margin 0
     padding 0
@@ -30,7 +45,6 @@ body
         z-index 10
 
 .sub-panel
-    border-display = 1px solid rgba(0, 0, 0, 0.38)
     graph-height = 40%
     position absolute
     &.search-box
@@ -112,7 +126,7 @@ body
     height 0
     text-align center
     .fa
-        color rgba(0, 0, 0, 1)
+        color rgba(0, 0, 0, 0.87)
         position absolute
         top 50%
         left 50%
@@ -135,6 +149,21 @@ body
     height 100%
     transform translateZ(0px)
     z-index 1
+
+.crime-toggles
+    width 100%
+    position relative
+
+.crime-toggle
+    float left
+    aspect-ratio 1 1
+    width (100 / 8)%
+    border-bottom border-display
+    & ~ &:before
+        border-left border-display
+    > .content
+        text-align center
+        line-height 1em
 
 @keyframes spin
     from
