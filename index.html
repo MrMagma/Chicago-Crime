@@ -11,13 +11,26 @@
     </head>
     <body>
         <div class="panel controls">
-            <div class="sub-panel search-box">Crime Search by Address Box</div>
+            <div class="sub-panel search">
+                <div class="search-box" contenteditable></div>
+                <p class="alt-text">Search Crimes by Address</p>
+                <div class="search-icon">
+                    <i class="fa fa-search"></i>
+                </div>
+            </div>
             <div class="sub-panel display">
                 <div class="sub-panel graph">
-                    <div class="sub-panel graph-display">Graph Display</div>
-                    <div class="sub-panel graph-controls">Graph Controls</div>
+                    <div class="content graph-display">Graph</div>
                 </div>
-                <div class="sub-panel controls">
+                <div class="sub-panel filter-controls">
+                    <div class="time-controls">
+                        <div class="time-info">Show crimes committed between</div>
+                        <div class="time-selector month-min-control">Jan</div>
+                        <div class="time-selector year-min-control">2016</div>
+                        <div class="time-selector filler">and</div>
+                        <div class="time-selector month-max-control">Feb</div>
+                        <div class="time-selector year-max-control">2016</div>
+                    </div>
                     <div class="crime-toggles">
                         <div class="crime-toggle crime-type-all">
                             <div class="content">A</div>
@@ -43,6 +56,9 @@
                         <div class="crime-toggle crime-type-other">
                             <div class="content">H</div>
                         </div>
+                    </div>
+                    <div class="facts">
+                        
                     </div>
                 </div>
             </div>

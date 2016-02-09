@@ -1,4 +1,5 @@
 border-display = 1px solid rgba(0, 0, 0, 0.12)
+control-panel-w = 25em
 
 aspect-ratio(width, height)
     position relative
@@ -21,7 +22,6 @@ body
     font-family sans-serif
 
 .panel
-    control-panel-w = 25em
     position absolute
     box-shadow 0 0 1em 0 #000
     &.main
@@ -47,7 +47,7 @@ body
 .sub-panel
     graph-height = 40%
     position absolute
-    &.search-box
+    &.search
         top 0
         left 0
         right 0
@@ -59,13 +59,11 @@ body
         bottom 0
         right 0
     &.graph
-        top 0
-        left 0
-        right 0
-        height graph-height
+        width 100%
         border-bottom border-display
-    &.controls
-        top graph-height
+        aspect-ratio 3 2
+    &.filter-controls
+        top (2/3 * control-panel-w)
         left 0
         bottom 0
         right 0
@@ -150,20 +148,97 @@ body
     transform translateZ(0px)
     z-index 1
 
+toggle-size = control-panel-w / 8
+
 .crime-toggles
     width 100%
-    position relative
+    top toggle-size
+    height toggle-size
 
 .crime-toggle
     float left
     aspect-ratio 1 1
-    width (100 / 8)%
+    width toggle-size
     border-bottom border-display
+    color rgba(0, 0, 0, 0.87)
     & ~ &:before
         border-left border-display
     > .content
+        line-height toggle-size
         text-align center
-        line-height 1em
+
+.facts
+    position absolute
+    top (2 * toggle-size)
+    left 0
+    bottom 0
+    right 0
+
+.search-box, .alt-text
+    font-size 1.4em
+    position absolute
+    top 0
+    left 0
+    bottom 0
+    right (3em / @font-size)
+    padding (0.5em / @font-size)
+    line-height (2em / @font-size)
+    
+.search-box
+    z-index 1
+    color rgba(0, 0, 0, 0.87)
+    
+.alt-text
+    z-index -1
+    color rgba(0, 0, 0, 0.38)
+    
+.search-icon
+    position absolute
+    top 0
+    bottom 0
+    right 0
+    width 3em
+    text-align center
+    border-left border-display
+    color rgba(0, 0, 0, 0.87)
+    > .fa
+        font-size 1.5em
+        line-height 2em
+        
+.time-controls
+    position relative
+    width 100%
+    height (toggle-size * 1.5)
+    border-bottom border-display
+    f-size = 1.2em
+    w = control-panel-w / 5 / f-size
+    color rgba(0, 0, 0, 0.87)
+    .time-info
+        position absolute
+        font-size f-size
+        width 100%
+        top 10%
+        height 40%
+        text-align center
+        line-height (toggle-size * 0.75 / f-size)
+    .time-selector
+        display inline-block
+        position absolute
+        font-size 1.2em
+        width w
+        line-height (toggle-size * 0.75 / f-size)
+        height 100%
+        top 40%
+        text-align center
+        white-space nowrap
+    .year-min-control
+        left w
+    .filler
+        left (w * 2)
+    .month-max-control
+        left (w * 3)
+    .year-max-control
+        left (w * 4)
 
 @keyframes spin
     from
