@@ -154,22 +154,33 @@ toggle-size = control-panel-w / 8
     width 100%
     top toggle-size
     height toggle-size
+    color rgba(0, 0, 0, 0.87)
+    .toggle-info
+        font-size 1.2em
+        text-align center
+        width 100%
+        height (toggle-size / @font-size)
+        line-height (toggle-size / @font-size)
 
 .crime-toggle
     float left
-    aspect-ratio 1 1
     width toggle-size
+    aspect-ratio 1 1
     border-bottom border-display
+    border-top border-display
     color rgba(0, 0, 0, 0.87)
     & ~ &:before
         border-left border-display
     > .content
+        border none
         line-height toggle-size
         text-align center
+        width 100%
+        background rgba(0, 0, 0, 0)
 
 .facts
     position absolute
-    top (2 * toggle-size)
+    top (3.5 * toggle-size)
     left 0
     bottom 0
     right 0
