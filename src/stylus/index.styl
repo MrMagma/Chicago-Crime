@@ -1,266 +1,289 @@
 border-display = 1px solid rgba(0, 0, 0, 0.12)
 control-panel-w = 25em
+toggle-size = control-panel-w / 8
 
 aspect-ratio(width, height)
     position relative
+    
     &:before
-        display block
         content ""
+        display block
         padding-top (height / width) * 100%
+        
     > .content
-        position absolute
-        top 0
-        left 0
-        right 0
         bottom 0
+        left 0
+        position absolute
+        right 0
+        top 0
 
 *
     margin 0
     padding 0
+
+.alt-text
+    color rgba(0, 0, 0, 0.38)
+    z-index -1
     
 body
     font-family sans-serif
 
-.panel
-    position absolute
-    box-shadow 0 0 1em 0 #000
-    &.main
-        top 0
-        left 0
-        bottom 0
-        right control-panel-w
-        z-index 0
-        .map
-            position absolute
-            top 0
-            left 0
-            bottom 0
-            right 0
-    &.controls
-        top 0
-        right 0
-        bottom 0
-        width control-panel-w
-        background-color #FFF
-        z-index 10
-
-.sub-panel
-    graph-height = 40%
-    position absolute
-    &.search
-        top 0
-        left 0
-        right 0
-        height 3em
-        border-bottom border-display
-    &.display
-        top 3em
-        left 0
-        bottom 0
-        right 0
-    &.graph
-        width 100%
-        border-bottom border-display
-        aspect-ratio 3 2
-    &.filter-controls
-        top (2/3 * control-panel-w)
-        left 0
-        bottom 0
-        right 0
-    &.graph-display
-        top 0
-        left 0
-        bottom 3em
-        right 0
-        border-bottom border-display
-    &.graph-controls
-        left 0
-        bottom 0
-        right 0
-        height 3em
-    
-        
-.loading-overlay
-    opacity-fade-time = 0.3s
-    position absolute
-    top 0
-    left 0
-    bottom 0
-    right 0
-    background rgba(255, 255, 255, 0.7)
-    transition opacity opacity-fade-time ease
-    display none
-    transform translateZ(0px)
-    z-index 1
-    .loading-message
-        font-size 2em
-        text-align center
-        display inline-block
-        position absolute
-        bottom 0
-        left 0
-        right 0
-        height 33%
-        line-height 2em
-    &.before-script-load
-        display block
-        opacity 1
-        animation-name fadein
-        animation-duration 1s
-        animation-timing-function ease
-        animation-iteration-count 1
-        
-        
-
-.spinner
-    animation-duration 1s
-    animation-name spin
-    animation-iteration-count infinite
-    animation-timing-function linear
-    position absolute
-    top 50%
-    left 50%
-    right 50%
-    height 0
-    text-align center
-    .fa
-        color rgba(0, 0, 0, 0.87)
-        position absolute
-        top 50%
-        left 50%
-        transform translate(-50%, -50%)
-        font-size 10em
-        display inline-block
-        
-.map-container
-    position absolute
-    top 0
-    left 0
-    bottom 0
-    right 0
-    
-.map-overlay
-    position absolute
-    top 0
-    left 0
-    width 100%
-    height 100%
-    transform translateZ(0px)
-    z-index 1
-
-toggle-size = control-panel-w / 8
-
-.crime-toggles
-    width 100%
-    top toggle-size
-    height toggle-size
-    color rgba(0, 0, 0, 0.87)
-    .toggle-info
-        font-size 1.2em
-        text-align center
-        width 100%
-        height (toggle-size / @font-size)
-        line-height (toggle-size / @font-size)
-
 .crime-toggle
-    float left
-    width toggle-size
     aspect-ratio 1 1
+    
     border-bottom border-display
     border-top border-display
     color rgba(0, 0, 0, 0.87)
+    float left
+    width toggle-size
+    
     & ~ &:before
         border-left border-display
+        
     > .content
+        background rgba(0, 0, 0, 0)
         border none
         line-height toggle-size
         text-align center
         width 100%
-        background rgba(0, 0, 0, 0)
+
+.crime-toggles
+    color rgba(0, 0, 0, 0.87)
+    height toggle-size
+    top toggle-size
+    width 100%
+    
+    .toggle-info
+        font-size 1.2em
+        height (toggle-size / @font-size)
+        line-height (toggle-size / @font-size)
+        text-align center
+        width 100%
 
 .facts
-    position absolute
-    top (3.5 * toggle-size)
-    left 0
     bottom 0
+    left 0
+    position absolute
     right 0
+    top (3.5 * toggle-size)
+
+.loading-overlay
+    opacity-fade-time = 0.3s
+    
+    background rgba(255, 255, 255, 0.7)
+    bottom 0
+    display none
+    left 0
+    position absolute
+    right 0
+    top 0
+    transform translateZ(0px)
+    transition opacity opacity-fade-time ease
+    z-index 1
+    
+    .loading-message
+        bottom 0
+        display inline-block
+        font-size 2em
+        height 33%
+        left 0
+        line-height 2em
+        position absolute
+        right 0
+        text-align center
+        
+    &.before-script-load
+        animation-duration 1s
+        animation-iteration-count 1
+        animation-name fadein
+        animation-timing-function ease
+        display block
+        opacity 1
+
+.map-container
+    bottom 0
+    left 0
+    position absolute
+    right 0
+    top 0
+    
+.map-overlay
+    height 100%
+    left 0
+    position absolute
+    top 0
+    transform translateZ(0px)
+    width 100%
+    z-index 1
+
+.panel
+    box-shadow 0 0 1em 0 #000
+    position absolute
+    
+    &.controls
+        background-color #FFF
+        bottom 0
+        right 0
+        top 0
+        width control-panel-w
+        z-index 10
+        
+    &.main
+        bottom 0
+        left 0
+        right control-panel-w
+        top 0
+        z-index 0
+        
+        .map
+            bottom 0
+            left 0
+            position absolute
+            right 0
+            top 0
 
 .search-box, .alt-text
-    font-size 1.4em
-    position absolute
-    top 0
-    left 0
     bottom 0
-    right (3em / @font-size)
-    padding (0.5em / @font-size)
+    font-size 1.4em
+    left 0
     line-height (2em / @font-size)
+    padding (0.5em / @font-size)
+    position absolute
+    right (3em / @font-size)
+    top 0
     
 .search-box
-    z-index 1
     color rgba(0, 0, 0, 0.87)
-    
-.alt-text
-    z-index -1
-    color rgba(0, 0, 0, 0.38)
+    z-index 1
     
 .search-icon
-    position absolute
-    top 0
+    border-left border-display
     bottom 0
+    color rgba(0, 0, 0, 0.87)
+    position absolute
     right 0
+    top 0
     width 3em
     text-align center
-    border-left border-display
-    color rgba(0, 0, 0, 0.87)
+    
     > .fa
         font-size 1.5em
         line-height 2em
+
+.spinner
+    animation-duration 1s
+    animation-iteration-count infinite
+    animation-name spin
+    animation-timing-function linear
+    height 0
+    left 50%
+    position absolute
+    right 50%
+    text-align center
+    top 50%
+    
+    .fa
+        color rgba(0, 0, 0, 0.87)
+        display inline-block
+        font-size 10em
+        left 50%
+        position absolute
+        top 50%
+        transform translate(-50%, -50%)
+
+.sub-panel
+    graph-height = 40%
+    
+    position absolute
+    
+    &.display
+        bottom 0
+        left 0
+        right 0
+        top 3em
+        
+    &.filter-controls
+        bottom 0
+        left 0
+        right 0
+        top (2/3 * control-panel-w)
+        
+    &.graph
+        aspect-ratio 3 2
+        
+        border-bottom border-display
+        width 100%
+        
+    &.graph-display
+        border-bottom border-display
+        bottom 3em
+        left 0
+        right 0
+        top 0
+        
+    &.search
+        border-bottom border-display
+        left 0
+        right 0
+        top 0
+        height 3em
+        
         
 .time-controls
-    position relative
-    width 100%
-    height (toggle-size * 1.5)
-    border-bottom border-display
     f-size = 1.2em
     w = control-panel-w / 5 / f-size
+    
+    border-bottom border-display
     color rgba(0, 0, 0, 0.87)
-    .time-info
-        position absolute
-        font-size f-size
-        width 100%
-        top 10%
-        height 40%
-        text-align center
-        line-height (toggle-size * 0.75 / f-size)
-    .time-selector
-        display inline-block
-        position absolute
-        font-size 1.2em
-        width w
-        line-height (toggle-size * 0.75 / f-size)
-        height 100%
-        top 40%
-        text-align center
-        white-space nowrap
-    .year-min-control
-        left w
+    height (toggle-size * 1.5)
+    position relative
+    width 100%
+    
     .filler
         left (w * 2)
+        
+    .time-info
+        font-size f-size
+        height 40%
+        line-height (toggle-size * 0.75 / f-size)
+        position absolute
+        text-align center
+        top 10%
+        width 100%
+        
+    .time-selector
+        display inline-block
+        font-size 1.2em
+        height 100%
+        line-height (toggle-size * 0.75 / f-size)
+        position absolute
+        text-align center
+        top 40%
+        white-space nowrap
+        width w
+        
     .month-max-control
         left (w * 3)
+        
     .year-max-control
         left (w * 4)
-
-@keyframes spin
-    from
-        transform rotate(0deg)
-    to
-        transform rotate(360deg)
+        
+    .year-min-control
+        left w
 
 @keyframes fadein
     from
         opacity 0
+        
     50%
         opacity 0
+        
     80%
         opacity 1
+
+@keyframes spin
+    from
+        transform rotate(0deg)
+        
+    to
+        transform rotate(360deg)
