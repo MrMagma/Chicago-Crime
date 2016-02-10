@@ -120,7 +120,7 @@ var MapPanel = function (_Component) {
             message: "Fetching data. Please wait..."
         });
 
-        _this.appendChild(_this.spinner);
+        _this.addChild(_this.spinner);
 
         _this.loadData();
         return _this;

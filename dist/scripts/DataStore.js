@@ -50,7 +50,8 @@ var DataStore = function (_EventRouter) {
     }, {
         key: "setData",
         value: function setData(key, value) {
-            if (this.isValid(key, value) && this._validate[key] && this._validate[key](value)) {
+            var valid = this.isValid(key, value) && this._validate[key] && this._validate[key](value);
+            if (valid) {
                 this._data[key] = value;
             } else {
                 this._validate[key] = function () {
@@ -58,7 +59,11 @@ var DataStore = function (_EventRouter) {
                 };
                 this._data[key] = value;
             }
-            this.fire("change", key, value);
+            this.fire("change", {
+                key: key,
+                value: value,
+                valid: valid
+            });
         }
     }, {
         key: "isValid",

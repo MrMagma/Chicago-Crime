@@ -19,14 +19,19 @@ class DataStore extends EventRouter {
         }
     }
     setData(key, value) {
-        if (this.isValid(key, value) && this._validate[key] &&
-            this._validate[key](value)) {
+        let valid = this.isValid(key, value) && this._validate[key] &&
+            this._validate[key](value);
+        if (valid) {
             this._data[key] = value;
         } else {
             this._validate[key] = () => true;
             this._data[key] = value;
         }
-        this.fire("change", key, value);
+        this.fire("change", {
+            key: key,
+            value: value,
+            valid: valid
+        });
     }
     isValid(key, value) {
         return true;

@@ -7,6 +7,7 @@ var callbackify = (function() {
     
     return function(cb) {
         cb[cbIdKey] = id++;
+        return cb;
     };
 })();
 
@@ -28,7 +29,7 @@ class EventRouter {
         }
         
         callbacks = callbacks.filter(cb => _.isFunction(cb))
-            .map(cb => callbackify(cb));
+            .map(callbackify);
         
         this._listeners[evt].push.apply(this._listeners[evt], callbacks);
         

@@ -6,6 +6,10 @@ var _MapPanel = require("./MapPanel.js");
 
 var _MapPanel2 = _interopRequireDefault(_MapPanel);
 
+var _FancySelect = require("./FancySelect.js");
+
+var _FancySelect2 = _interopRequireDefault(_FancySelect);
+
 var _constants = require("./constants.js");
 
 var _constants2 = _interopRequireDefault(_constants);
@@ -26,6 +30,26 @@ function afterLoad() {
                 max: _constants2.default.map.zoom.max
             }
         }
+    });
+
+    new _FancySelect2.default({
+        el: "month-min-select",
+        values: _constants2.default.months
+    });
+
+    new _FancySelect2.default({
+        el: "month-max-select",
+        values: _constants2.default.months
+    });
+
+    new _FancySelect2.default({
+        el: "year-min-select",
+        values: _constants2.default.years
+    });
+
+    new _FancySelect2.default({
+        el: "year-max-select",
+        values: _constants2.default.years
     });
 
     var loaders = document.getElementsByClassName("before-script-load");

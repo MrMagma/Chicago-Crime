@@ -21,6 +21,7 @@ var callbackify = function () {
 
     return function (cb) {
         cb[cbIdKey] = id++;
+        return cb;
     };
 }();
 
@@ -48,9 +49,7 @@ var EventRouter = function () {
 
             callbacks = callbacks.filter(function (cb) {
                 return _underscore2.default.isFunction(cb);
-            }).map(function (cb) {
-                return callbackify(cb);
-            });
+            }).map(callbackify);
 
             this._listeners[evt].push.apply(this._listeners[evt], callbacks);
 

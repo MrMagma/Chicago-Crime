@@ -77,5 +77,7 @@ exports.default = {
         "LIQUOR LAW VIOLATION": crimeColors.substances,
         "OTHER OFFENSE": crimeColors.other,
         "WEAPONS VIOLATION": crimeColors.other
-    }
+    },
+    months: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+    years: [2011, 2012, 2013, 2014, 2015, 2016]
 };

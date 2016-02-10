@@ -82,8 +82,8 @@ var Component = function (_DataStore) {
     }
 
     _createClass(Component, [{
-        key: "appendChild",
-        value: function appendChild(child) {
+        key: "addChild",
+        value: function addChild(child) {
             this.children.push(child);
             child.parent = this;
             this.domNode.appendChild(child.domNode);

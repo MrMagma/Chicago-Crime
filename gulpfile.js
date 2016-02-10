@@ -1,5 +1,11 @@
 var gulp = require("gulp");
 
+var del = require("del");
+
+gulp.task("clean", function() {
+    return del.sync("./dist/scripts/**/*");
+});
+
 var sourcemaps = require("gulp-sourcemaps");
 
 var babel = require("gulp-babel");
@@ -47,6 +53,6 @@ gulp.task("build-styles", function() {
         .pipe(gulp.dest("./dist/browser"));
 });
 
-gulp.task("build", ["build-scripts", "build-styles"]);
+gulp.task("build", ["clean", "build-scripts", "build-styles"]);
 
 gulp.task("default", ["build"]);

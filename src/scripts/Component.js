@@ -24,7 +24,7 @@ class Component extends DataStore {
             this.appendChild(child);
         }
     }
-    appendChild(child) {
+    addChild(child) {
         this.children.push(child);
         child.parent = this;
         this.domNode.appendChild(child.domNode);

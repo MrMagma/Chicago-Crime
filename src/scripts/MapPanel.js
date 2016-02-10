@@ -71,7 +71,7 @@ class MapPanel extends Component {
             message: "Fetching data. Please wait..."
         });
         
-        this.appendChild(this.spinner);
+        this.addChild(this.spinner);
         
         this.loadData();
     }

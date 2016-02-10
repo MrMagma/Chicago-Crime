@@ -1,6 +1,7 @@
 import "underscore";
 
 import MapPanel from "./MapPanel.js";
+import FancySelect from "./FancySelect.js";
 import constants from "./constants.js";
 
 function afterLoad() {
@@ -17,6 +18,26 @@ function afterLoad() {
                 max: constants.map.zoom.max
             }
         }
+    });
+    
+    new FancySelect({
+        el: "month-min-select",
+        values: constants.months
+    });
+    
+    new FancySelect({
+        el: "month-max-select",
+        values: constants.months
+    });
+    
+    new FancySelect({
+        el: "year-min-select",
+        values: constants.years
+    });
+    
+    new FancySelect({
+        el: "year-max-select",
+        values: constants.years
     });
     
     var loaders = document.getElementsByClassName("before-script-load");
