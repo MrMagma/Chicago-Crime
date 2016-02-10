@@ -1,7 +1,7 @@
 import "underscore";
 
 import MapPanel from "./MapPanel.js";
-import FancySelect from "./FancySelect.js";
+import TimePanel from "./TimePanel.js";
 import TogglePanel from "./TogglePanel.js";
 import constants from "./constants.js";
 
@@ -21,24 +21,8 @@ function afterLoad() {
         }
     });
     
-    new FancySelect({
-        el: "month-min-select",
-        values: constants.months
-    });
-    
-    new FancySelect({
-        el: "month-max-select",
-        values: constants.months
-    });
-    
-    new FancySelect({
-        el: "year-min-select",
-        values: constants.years
-    });
-    
-    new FancySelect({
-        el: "year-max-select",
-        values: constants.years
+    new TimePanel({
+        el: "time-controls",
     });
     
     new TogglePanel({

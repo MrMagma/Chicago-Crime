@@ -12,8 +12,14 @@ var callbackify = (function() {
 })();
 
 class EventRouter {
-    constructor() {
+    constructor(cfg = {}) {
         this._listeners = {};
+        
+        for (let evt in cfg) {
+            if (cfg.hasOwnProperty(evt)) {
+                this.on(evt, cfg[evt]);
+            }
+        }
     }
     on(evt, callbacks) {
         if (!_.isString(evt)) {

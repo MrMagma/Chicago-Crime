@@ -27,9 +27,17 @@ var callbackify = function () {
 
 var EventRouter = function () {
     function EventRouter() {
+        var cfg = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
+
         _classCallCheck(this, EventRouter);
 
         this._listeners = {};
+
+        for (var evt in cfg) {
+            if (cfg.hasOwnProperty(evt)) {
+                this.on(evt, cfg[evt]);
+            }
+        }
     }
 
     _createClass(EventRouter, [{

@@ -6,9 +6,9 @@ var _MapPanel = require("./MapPanel.js");
 
 var _MapPanel2 = _interopRequireDefault(_MapPanel);
 
-var _FancySelect = require("./FancySelect.js");
+var _TimePanel = require("./TimePanel.js");
 
-var _FancySelect2 = _interopRequireDefault(_FancySelect);
+var _TimePanel2 = _interopRequireDefault(_TimePanel);
 
 var _TogglePanel = require("./TogglePanel.js");
 
@@ -36,24 +36,8 @@ function afterLoad() {
         }
     });
 
-    new _FancySelect2.default({
-        el: "month-min-select",
-        values: _constants2.default.months
-    });
-
-    new _FancySelect2.default({
-        el: "month-max-select",
-        values: _constants2.default.months
-    });
-
-    new _FancySelect2.default({
-        el: "year-min-select",
-        values: _constants2.default.years
-    });
-
-    new _FancySelect2.default({
-        el: "year-max-select",
-        values: _constants2.default.years
+    new _TimePanel2.default({
+        el: "time-controls"
     });
 
     new _TogglePanel2.default({

@@ -4,7 +4,7 @@ import EventRouter from "./EventRouter.js";
 
 class DataStore extends EventRouter {
     constructor(data = {}) {
-        super();
+        super(data.listeners);
         if (!_.isObject(data)) {
             data = {};
         }

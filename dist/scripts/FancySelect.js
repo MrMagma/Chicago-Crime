@@ -44,6 +44,7 @@ var FancySelectElement = function (_Component) {
     _createClass(FancySelectElement, [{
         key: "handleClick",
         value: function handleClick() {
+            console.log("Hi");
             this.parent.setData("value", this.value);
             this.parent.toggleDropdown();
         }
@@ -64,6 +65,8 @@ var FancySelect = function (_Component2) {
 
         var el = cfg.el;
         var values = cfg.values;
+        var _cfg$start = cfg.start;
+        var start = _cfg$start === undefined ? values[0] : _cfg$start;
 
 
         _this2.values = values;
@@ -101,10 +104,12 @@ var FancySelect = function (_Component2) {
             }
         }
 
+        _this2.domNode.className += " time-selector ";
         _this2.on("change", _this2.handleChange.bind(_this2));
-        _this2.setData("value", _this2.values[0]);
+        _this2.setData("value", start);
         _this2.hideDropdown();
         _this2.domNode.className += " fancy-select ";
+        document.addEventListener("click", _this2.handleDocClick.bind(_this2));
         return _this2;
     }
 
@@ -155,7 +160,6 @@ var FancySelect = function (_Component2) {
     }, {
         key: "hideDropdown",
         value: function hideDropdown() {
-            console.log(this.getData("value"));
             var valInd = this.values.indexOf(this.getData("value"));
             for (var i = 0; i < this.children.length; i++) {
                 var child = this.children[i];
@@ -163,6 +167,18 @@ var FancySelect = function (_Component2) {
                 child.domNode.style.top = "0%";
             }
             this.shown = false;
+        }
+    }, {
+        key: "handleDocClick",
+        value: function handleDocClick(evt) {
+            var path = evt.path;
+
+            while (path.length) {
+                if (path.shift().id === this.domNode.id) {
+                    return;
+                }
+            }
+            this.hideDropdown();
         }
     }, {
         key: "toggleDropdown",

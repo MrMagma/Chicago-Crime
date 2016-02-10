@@ -30,7 +30,7 @@ var DataStore = function (_EventRouter) {
 
         _classCallCheck(this, DataStore);
 
-        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(DataStore).call(this));
+        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(DataStore).call(this, data.listeners));
 
         if (!_underscore2.default.isObject(data)) {
             data = {};

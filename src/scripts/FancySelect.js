@@ -14,6 +14,7 @@ class FancySelectElement extends Component {
         this.domNode.className += " fancy-select-child hidden ";
     }
     handleClick() {
+        console.log("Hi");
         this.parent.setData("value", this.value);
         this.parent.toggleDropdown();
     }
@@ -22,7 +23,7 @@ class FancySelectElement extends Component {
 class FancySelect extends Component {
     constructor(cfg = {}) {
         super(cfg);
-        let {el, values} = cfg;
+        let {el, values, start = values[0]} = cfg;
         
         this.values = values;
         this.domNode = document.getElementById(el);
@@ -38,10 +39,12 @@ class FancySelect extends Component {
             this.addChild(c);
         }
         
+        this.domNode.className += " time-selector ";
         this.on("change", this.handleChange.bind(this));
-        this.setData("value", this.values[0]);
+        this.setData("value", start);
         this.hideDropdown();
         this.domNode.className += " fancy-select ";
+        document.addEventListener("click", this.handleDocClick.bind(this));
     }
     isValid(key, value) {
         if (key === "value") {
@@ -76,7 +79,6 @@ class FancySelect extends Component {
         this.shown = true;
     }
     hideDropdown() {
-        console.log(this.getData("value"));
         let valInd = this.values.indexOf(this.getData("value"));
         for (let i = 0; i < this.children.length; i++) {
             let child = this.children[i];
@@ -84,6 +86,15 @@ class FancySelect extends Component {
             child.domNode.style.top = "0%";
         }
         this.shown = false;
+    }
+    handleDocClick(evt) {
+        let {path} = evt;
+        while (path.length) {
+            if (path.shift().id === this.domNode.id) {
+                return;
+            }
+        }
+        this.hideDropdown();
     }
     toggleDropdown() {
         if (this.shown) {
