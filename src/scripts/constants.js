@@ -94,5 +94,15 @@ export default {
         2014,
         2015,
         2016
+    ],
+    crimeTypes: [
+        "all",
+        "property",
+        "personal",
+        "sexual",
+        "minor",
+        "domestic",
+        "substances",
+        "other"
     ]
 };

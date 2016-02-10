@@ -10,6 +10,10 @@ var _FancySelect = require("./FancySelect.js");
 
 var _FancySelect2 = _interopRequireDefault(_FancySelect);
 
+var _TogglePanel = require("./TogglePanel.js");
+
+var _TogglePanel2 = _interopRequireDefault(_TogglePanel);
+
 var _constants = require("./constants.js");
 
 var _constants2 = _interopRequireDefault(_constants);
@@ -50,6 +54,11 @@ function afterLoad() {
     new _FancySelect2.default({
         el: "year-max-select",
         values: _constants2.default.years
+    });
+
+    new _TogglePanel2.default({
+        el: "crime-toggles",
+        types: _constants2.default.crimeTypes
     });
 
     var loaders = document.getElementsByClassName("before-script-load");

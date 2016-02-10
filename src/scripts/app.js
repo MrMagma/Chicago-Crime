@@ -2,6 +2,7 @@ import "underscore";
 
 import MapPanel from "./MapPanel.js";
 import FancySelect from "./FancySelect.js";
+import TogglePanel from "./TogglePanel.js";
 import constants from "./constants.js";
 
 function afterLoad() {
@@ -38,6 +39,11 @@ function afterLoad() {
     new FancySelect({
         el: "year-max-select",
         values: constants.years
+    });
+    
+    new TogglePanel({
+        el: "crime-toggles",
+        types: constants.crimeTypes
     });
     
     var loaders = document.getElementsByClassName("before-script-load");

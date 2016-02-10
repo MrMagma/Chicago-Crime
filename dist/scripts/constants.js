@@ -79,5 +79,6 @@ exports.default = {
         "WEAPONS VIOLATION": crimeColors.other
     },
     months: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-    years: [2011, 2012, 2013, 2014, 2015, 2016]
+    years: [2011, 2012, 2013, 2014, 2015, 2016],
+    crimeTypes: ["all", "property", "personal", "sexual", "minor", "domestic", "substances", "other"]
 };
