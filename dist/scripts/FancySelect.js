@@ -44,7 +44,6 @@ var FancySelectElement = function (_Component) {
     _createClass(FancySelectElement, [{
         key: "handleClick",
         value: function handleClick() {
-            console.log("Hi");
             this.parent.setData("value", this.value);
             this.parent.toggleDropdown();
         }
@@ -106,7 +105,7 @@ var FancySelect = function (_Component2) {
 
         _this2.domNode.className += " time-selector ";
         _this2.on("change", _this2.handleChange.bind(_this2));
-        _this2.setData("value", start);
+        _this2.initData("value", start);
         _this2.hideDropdown();
         _this2.domNode.className += " fancy-select ";
         document.addEventListener("click", _this2.handleDocClick.bind(_this2));

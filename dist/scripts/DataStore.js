@@ -35,7 +35,7 @@ var DataStore = function (_EventRouter) {
         if (!_underscore2.default.isObject(data)) {
             data = {};
         }
-        _this._data = data;
+        _this._data = {};
         _this._validate = {};
         return _this;
     }
@@ -48,16 +48,28 @@ var DataStore = function (_EventRouter) {
             }
         }
     }, {
-        key: "setData",
-        value: function setData(key, value) {
-            var valid = this.isValid(key, value) && this._validate[key] && this._validate[key](value);
-            if (valid) {
+        key: "_setData",
+        value: function _setData(key, value) {
+            if (this._validate[key]) {
                 this._data[key] = value;
             } else {
                 this._validate[key] = function () {
                     return true;
                 };
                 this._data[key] = value;
+            }
+        }
+    }, {
+        key: "initData",
+        value: function initData(key, value) {
+            this._setData(key, value);
+        }
+    }, {
+        key: "setData",
+        value: function setData(key, value) {
+            var valid = this.isValid(key, value) && (!this._validate[key] || this._validate[key](value));
+            if (valid) {
+                this._setData(key, value);
             }
             this.fire("change", {
                 key: key,

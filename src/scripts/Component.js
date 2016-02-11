@@ -14,8 +14,8 @@ var getId = (function() {
 
 class Component extends DataStore {
     constructor(cfg = {}) {
-        let {data = {}, children = [], parent = null} = cfg;
-        super(data);
+        let {children = [], parent = null} = cfg;
+        super(cfg);
         this[idKey] = getId();
         this.children = children;
         this.parent = parent;

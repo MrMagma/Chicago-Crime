@@ -22,7 +22,48 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 function afterLoad() {
     L.mapbox.accessToken = "pk.eyJ1IjoibXJtYWdtYSIsImEiOiJjaWs3ZmI3YWYwMWZjcGlrc25uenkxeWoyIn0.dRTC3GgeeJLxvh5RrzBogw";
-    var map = new _MapPanel2.default({
+
+    var timePanel, togglePanel, map;
+
+    timePanel = new _TimePanel2.default({
+        el: "time-controls",
+        year: {
+            min: new Date().getFullYear(),
+            max: new Date().getFullYear()
+        },
+        month: {
+            min: "Jan",
+            max: "Dec"
+        },
+        listeners: {
+            change: function change() {
+                var year = timePanel.getData("year");
+                var month = timePanel.getData("month");
+                map.setData("date_filter", {
+                    year: {
+                        min: year.min,
+                        max: year.max
+                    },
+                    month: {
+                        min: month.min,
+                        max: month.max
+                    }
+                });
+            }
+        }
+    });
+
+    togglePanel = new _TogglePanel2.default({
+        el: "crime-toggles",
+        types: _constants2.default.crimeTypes,
+        listeners: {
+            change: function change() {
+                map.setData("type_filter", togglePanel.getData("active"));
+            }
+        }
+    });
+
+    map = new _MapPanel2.default({
         lat: (_constants2.default.map.southWest.lat + _constants2.default.map.northEast.lat) / 2,
         lng: (_constants2.default.map.southWest.lng + _constants2.default.map.northEast.lng) / 2,
         zoom: 10,
@@ -34,15 +75,6 @@ function afterLoad() {
                 max: _constants2.default.map.zoom.max
             }
         }
-    });
-
-    new _TimePanel2.default({
-        el: "time-controls"
-    });
-
-    new _TogglePanel2.default({
-        el: "crime-toggles",
-        types: _constants2.default.crimeTypes
     });
 
     var loaders = document.getElementsByClassName("before-script-load");

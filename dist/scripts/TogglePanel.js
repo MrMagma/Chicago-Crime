@@ -44,7 +44,7 @@ var Toggle = function (_Component) {
         _this.domNode.appendChild(_this.button);
         _this.on("change", _this.handleChange.bind(_this));
 
-        _this.setData("active", true);
+        _this.initData("active", true);
         return _this;
     }
 
@@ -81,6 +81,7 @@ var TogglePanel = function (_Component2) {
 
         _this2.domNode = document.getElementById(el);
 
+        _this2.initData("active", {});
         var _iteratorNormalCompletion = true;
         var _didIteratorError = false;
         var _iteratorError = undefined;
@@ -92,7 +93,8 @@ var TogglePanel = function (_Component2) {
                 var toggle = new Toggle({
                     type: type
                 });
-                _this2.setData(type + "_is_active", toggle.getData("active"));
+                _this2.initData(type + "_is_active", toggle.getData("active"));
+                _this2.getData("active")[type] = toggle.getData("active");
                 _this2.listenToToggle(toggle, type);
                 _this2.addChild(toggle);
             }
@@ -121,6 +123,7 @@ var TogglePanel = function (_Component2) {
 
             toggle.on("change", function () {
                 _this3.setData(type + "_is_active", toggle.getData("active"));
+                _this3.getData("active")[type] = toggle.getData("active");
             });
         }
     }, {

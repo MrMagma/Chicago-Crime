@@ -39,6 +39,9 @@ var TimePanel = function (_Component) {
         var month = cfg.month;
 
 
+        _this.initData("month", month);
+        _this.initData("year", year);
+
         _this.domNode = document.getElementById(el);
 
         new _FancySelect2.default({
@@ -101,9 +104,6 @@ var TimePanel = function (_Component) {
                 }
             }
         });
-
-        _this.setData("month", month);
-        _this.setData("year", year);
         return _this;
     }
 

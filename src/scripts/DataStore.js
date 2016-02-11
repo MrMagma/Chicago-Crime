@@ -8,7 +8,7 @@ class DataStore extends EventRouter {
         if (!_.isObject(data)) {
             data = {};
         }
-        this._data = data;
+        this._data = {};
         this._validate = {
             
         };
@@ -18,14 +18,22 @@ class DataStore extends EventRouter {
             return this._data[key];
         }
     }
-    setData(key, value) {
-        let valid = this.isValid(key, value) && this._validate[key] &&
-            this._validate[key](value);
-        if (valid) {
+    _setData(key, value) {
+        if (this._validate[key]) {
             this._data[key] = value;
         } else {
             this._validate[key] = () => true;
             this._data[key] = value;
+        }
+    }
+    initData(key, value) {
+        this._setData(key, value);
+    }
+    setData(key, value) {
+        let valid = this.isValid(key, value) && (!this._validate[key] ||
+            this._validate[key](value));
+        if (valid) {
+            this._setData(key, value);
         }
         this.fire("change", {
             key: key,

@@ -7,6 +7,9 @@ class TimePanel extends Component {
         super(cfg);
         let {el, year, month} = cfg;
         
+        this.initData("month", month);
+        this.initData("year", year);
+        
         this.domNode = document.getElementById(el);
         
         new FancySelect({
@@ -61,9 +64,6 @@ class TimePanel extends Component {
                 }
             }
         });
-        
-        this.setData("month", month);
-        this.setData("year", year);
     }
 }
 

@@ -16,7 +16,7 @@ class Toggle extends Component {
         this.domNode.appendChild(this.button);
         this.on("change", this.handleChange.bind(this));
         
-        this.setData("active", true);
+        this.initData("active", true);
     }
     handleClick() {
         this.setData("active", !this.getData("active"));
@@ -37,11 +37,13 @@ class TogglePanel extends Component {
         
         this.domNode = document.getElementById(el);
         
+        this.initData("active", {});
         for (let type of types) {
             let toggle = new Toggle({
                 type: type
             });
-            this.setData(`${type}_is_active`, toggle.getData("active"));
+            this.initData(`${type}_is_active`, toggle.getData("active"));
+            this.getData("active")[type] = toggle.getData("active");
             this.listenToToggle(toggle, type);
             this.addChild(toggle);
         }
@@ -49,6 +51,7 @@ class TogglePanel extends Component {
     listenToToggle(toggle, type) {
         toggle.on("change", () => {
             this.setData(`${type}_is_active`, toggle.getData("active"));
+            this.getData("active")[type] = toggle.getData("active");
         });
     }
     getToggleState(type) {

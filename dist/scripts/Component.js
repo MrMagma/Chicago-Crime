@@ -40,14 +40,12 @@ var Component = function (_DataStore) {
 
         _classCallCheck(this, Component);
 
-        var _cfg$data = cfg.data;
-        var data = _cfg$data === undefined ? {} : _cfg$data;
         var _cfg$children = cfg.children;
         var children = _cfg$children === undefined ? [] : _cfg$children;
         var _cfg$parent = cfg.parent;
         var parent = _cfg$parent === undefined ? null : _cfg$parent;
 
-        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Component).call(this, data));
+        var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(Component).call(this, cfg));
 
         _this[idKey] = getId();
         _this.children = children;

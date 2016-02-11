@@ -14,7 +14,6 @@ class FancySelectElement extends Component {
         this.domNode.className += " fancy-select-child hidden ";
     }
     handleClick() {
-        console.log("Hi");
         this.parent.setData("value", this.value);
         this.parent.toggleDropdown();
     }
@@ -41,7 +40,7 @@ class FancySelect extends Component {
         
         this.domNode.className += " time-selector ";
         this.on("change", this.handleChange.bind(this));
-        this.setData("value", start);
+        this.initData("value", start);
         this.hideDropdown();
         this.domNode.className += " fancy-select ";
         document.addEventListener("click", this.handleDocClick.bind(this));

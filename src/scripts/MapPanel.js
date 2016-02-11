@@ -74,6 +74,7 @@ class MapPanel extends Component {
         this.addChild(this.spinner);
         
         this.loadData();
+        this.on("change", this.handleChange.bind(this));
     }
     loadData() {
         let year = (new Date()).getFullYear();
@@ -110,6 +111,9 @@ class MapPanel extends Component {
         }
         
         this.map.addLayer(this.clusterer);
+    }
+    handleChange() {
+        
     }
 }
 

@@ -123,6 +123,7 @@ var MapPanel = function (_Component) {
         _this.addChild(_this.spinner);
 
         _this.loadData();
+        _this.on("change", _this.handleChange.bind(_this));
         return _this;
     }
 
@@ -189,6 +190,9 @@ var MapPanel = function (_Component) {
 
             this.map.addLayer(this.clusterer);
         }
+    }, {
+        key: "handleChange",
+        value: function handleChange() {}
     }]);
 
     return MapPanel;
