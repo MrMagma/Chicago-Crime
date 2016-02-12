@@ -64,7 +64,7 @@ function iconCreator(cluster) {
         stroke.desaturate(35).toHexString();
     }
 
-    var sz = 24 * (1 + cluster.getChildCount() / 200);
+    var sz = 24 * (1 + cluster.getChildCount() / _crimedata2.default.count() * 10);
 
     var icon = L.divIcon({
         className: "crime-icon",
@@ -179,7 +179,8 @@ var MapPanel = function (_Component) {
         value: function loadData() {
             var _this2 = this;
 
-            var year = new Date().getFullYear();
+            var year = arguments.length <= 0 || arguments[0] === undefined ? new Date().getFullYear() : arguments[0];
+
             if (!_crimedata2.default.hasYearLoaded(year)) {
                 (function () {
                     if (!_crimedata2.default.isYearRequested(year)) {
@@ -190,8 +191,10 @@ var MapPanel = function (_Component) {
                     var spinTimer = setTimeout(_this2.spinner.show.bind(_this2.spinner), 500);
                     _crimedata2.default.onYearLoad(year, function () {
                         clearTimeout(spinTimer);
-                        _this2.spinner.hide();
-                        _this2.displayData();
+                        if (!_crimedata2.default.isRequestActive()) {
+                            _this2.spinner.hide();
+                            _this2.displayData();
+                        }
                     });
                 })();
             } else {
@@ -206,6 +209,20 @@ var MapPanel = function (_Component) {
             var crimes = _crimedata2.default.all();
             var min = dateFilter.min.getTime(),
                 max = dateFilter.max.getTime();
+
+            var allLoaded = true;
+            var maxYear = dateFilter.max.getFullYear();
+            for (var year = dateFilter.min.getFullYear(); year < maxYear; year++) {
+                console.log(year, _crimedata2.default.isYearRequested(year));
+                if (!_crimedata2.default.isYearRequested(year)) {
+                    this.loadData(year);
+                    allLoaded = false;
+                }
+            }
+
+            if (!allLoaded) {
+                return;
+            }
 
             var _iteratorNormalCompletion2 = true;
             var _didIteratorError2 = false;

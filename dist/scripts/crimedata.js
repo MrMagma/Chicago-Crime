@@ -19,13 +19,14 @@ var crimedata = [];
 var requested = {};
 var loaded = {};
 var callbacks = {};
+var activeRequests = 0;
 
 var datautil = {
     hasYearLoaded: function hasYearLoaded(year) {
-        return loaded[year];
+        return !!loaded[year];
     },
     isYearRequested: function isYearRequested(year) {
-        return requested[year];
+        return !!requested[year];
     },
     onYearLoad: function onYearLoad(year, cb) {
         if (!_underscore2.default.isFunction(cb) && !_underscore2.default.isArray(cb)) {
@@ -93,6 +94,7 @@ var datautil = {
                     return _underscore2.default.isString(val.latitude) && _underscore2.default.isString(val.longitude);
                 }));
                 loaded = true;
+                activeRequests -= 1;
                 var _iteratorNormalCompletion2 = true;
                 var _didIteratorError2 = false;
                 var _iteratorError2 = undefined;
@@ -117,12 +119,18 @@ var datautil = {
                         }
                     }
                 }
+
+                callbacks[year] = [];
             };
 
+            activeRequests += 1;
             req.send();
 
             requested[year] = true;
         }
+    },
+    count: function count() {
+        return crimedata.length;
     },
     all: function all() {
         var query = arguments.length <= 0 || arguments[0] === undefined ? {} : arguments[0];
@@ -133,6 +141,9 @@ var datautil = {
 
 
         return crimedata.filter(where);
+    },
+    isRequestActive: function isRequestActive() {
+        return activeRequests > 0;
     }
 };
 

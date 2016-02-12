@@ -30,6 +30,23 @@ aspect-ratio(width, height)
 body
     font-family sans-serif
 
+.crime-icon
+    border-radius 50%
+    box-shadow 0 0 0.5em 0 #000
+    overflow hidden
+    transition box-shadow 0.3s ease
+    
+    &:hover
+        box-shadow 0 0.25em 1em 0 #000
+        
+    .crime-icon-inner
+        border-radius 50%
+        bottom 0
+        left 0
+        position absolute
+        right 0
+        top 0
+
 .crime-toggle
     aspect-ratio 1 1
     
@@ -113,7 +130,7 @@ body
     &.before-script-load
         animation-duration 1s
         animation-iteration-count 1
-        animation-name fadein
+        animation-name fadein-icon
         animation-timing-function ease
         display block
         opacity 1
@@ -290,7 +307,13 @@ body
     .year-min-control
         left w
 
-@keyframes fadein
+@keyframes fadein-icon
+    from
+        opacity 0
+    to
+        opacity 1
+
+@keyframes fadein-loader
     from
         opacity 0
         

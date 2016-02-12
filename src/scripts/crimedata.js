@@ -7,13 +7,14 @@ let crimedata = [];
 let requested = {};
 let loaded = {};
 let callbacks = {};
+let activeRequests = 0;
 
 let datautil = {
     hasYearLoaded(year) {
-        return loaded[year];
+        return !!loaded[year];
     },
     isYearRequested(year) {
-        return requested[year];
+        return !!requested[year];
     },
     onYearLoad(year, cb) {
         if (!_.isFunction(cb) && !_.isArray(cb)) {
@@ -49,7 +50,7 @@ let datautil = {
                     year: year
                 }
             });
-
+            
             req.onload = (json) => {
                 crimedata.push.apply(crimedata, json.map(crime => {
                         crime.date = new Date(crime.date);
@@ -58,20 +59,29 @@ let datautil = {
                     .filter(val => _.isString(val.latitude) &&
                         _.isString(val.longitude)));
                 loaded = true;
+                activeRequests -= 1;
                 for (let cb of callbacks[year]) {
                     cb();
                 }
+                callbacks[year] = [];
             };
-
+            
+            activeRequests += 1;
             req.send();
             
             requested[year] = true;
         }
     },
+    count() {
+        return crimedata.length;
+    },
     all(query = {}) {
         let {where = () => true} = query;
         
         return crimedata.filter(where);
+    },
+    isRequestActive() {
+        return activeRequests > 0;
     }
 };
 

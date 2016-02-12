@@ -27,7 +27,7 @@ function iconCreator(cluster) {
         stroke.desaturate(35).toHexString();
     }
     
-    let sz = 24 * (1 + (cluster.getChildCount() / 200));
+    let sz = 24 * (1 + (cluster.getChildCount() / crimedata.count()) * 10);
     
     let icon = L.divIcon({
         className: "crime-icon",
@@ -94,8 +94,7 @@ class MapPanel extends Component {
         
         this.map.addLayer(this.clusterer);
     }
-    loadData() {
-        let year = (new Date()).getFullYear();
+    loadData(year = (new Date()).getFullYear()) {
         if (!crimedata.hasYearLoaded(year)) {
             if (!crimedata.isYearRequested(year)) {
                 crimedata.loadYear(year);
@@ -106,8 +105,10 @@ class MapPanel extends Component {
                 500);
             crimedata.onYearLoad(year, () => {
                 clearTimeout(spinTimer);
-                this.spinner.hide();
-                this.displayData();
+                if (!crimedata.isRequestActive()) {
+                    this.spinner.hide();
+                    this.displayData();
+                }
             });
         } else {
             this.displayData();
@@ -119,6 +120,20 @@ class MapPanel extends Component {
         let crimes = crimedata.all();
         let min = dateFilter.min.getTime(),
             max = dateFilter.max.getTime();
+        
+        let allLoaded = true;
+        let maxYear = dateFilter.max.getFullYear();
+        for (let year = dateFilter.min.getFullYear(); year < maxYear; year++) {
+            console.log(year, crimedata.isYearRequested(year));
+            if (!crimedata.isYearRequested(year)) {
+                this.loadData(year);
+                allLoaded = false;
+            }
+        }
+        
+        if (!allLoaded) {
+            return;
+        }
         
         for (let crime of crimes) {
             let marker = CrimeMarker.getMarkerForCrime(crime, this.clusterer);
