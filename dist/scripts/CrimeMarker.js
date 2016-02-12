@@ -23,10 +23,10 @@ var CrimeMarker = function () {
         this.crime = crime;
         this.marker = new L.Marker(L.latLng(crime.latitude, crime.longitude), {
             icon: L.divIcon({
-                className: _constants2.default.css.classPrefix + "-" + crime.primary_type.replace(" ", "_") + " crime-icon",
+                className: _constants2.default.css.classPrefix + "-" + crime.primary_type.replace(/ /g, "_") + " crime-icon",
                 iconSize: new L.Point(18, 18)
             }),
-            title: "Crime doesn't pay",
+            title: crime.primary_type,
             crimeType: crime.primary_type
         });
         this.clusterer = clusterer;

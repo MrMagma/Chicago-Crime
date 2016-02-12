@@ -10,7 +10,7 @@ import constants from "./constants.js";
 function iconCreator(cluster) {
     let {stroke, fill} = cluster.getAllChildMarkers()
         .map(marker => {
-            return constants.colors[marker.options.crimeType];
+            return constants.colors[constants.typeMap[marker.options.crimeType]];
         })
         .reduce((pVal, cVal, i) => {
             return {
@@ -117,6 +117,7 @@ class MapPanel extends Component {
     displayData() {
         let dateFilter = sortDateRange(this.getData("date_filter"));
         let typeFilter = this.getData("type_filter");
+        
         let crimes = crimedata.all();
         let min = dateFilter.min.getTime(),
             max = dateFilter.max.getTime();
@@ -124,7 +125,6 @@ class MapPanel extends Component {
         let allLoaded = true;
         let maxYear = dateFilter.max.getFullYear();
         for (let year = dateFilter.min.getFullYear(); year < maxYear; year++) {
-            console.log(year, crimedata.isYearRequested(year));
             if (!crimedata.isYearRequested(year)) {
                 this.loadData(year);
                 allLoaded = false;
@@ -138,7 +138,8 @@ class MapPanel extends Component {
         for (let crime of crimes) {
             let marker = CrimeMarker.getMarkerForCrime(crime, this.clusterer);
             let epoch = crime.date.getTime();
-            if (epoch >= min && epoch <= max) {
+            if (epoch >= min && epoch <= max &&
+                typeFilter[constants.typeMap[crime.primary_type]]) {
                 marker.show();
             } else {
                 marker.hide();

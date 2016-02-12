@@ -122,8 +122,8 @@ var TogglePanel = function (_Component2) {
             var _this3 = this;
 
             toggle.on("change", function () {
-                _this3.setData(type + "_is_active", toggle.getData("active"));
                 _this3.getData("active")[type] = toggle.getData("active");
+                _this3.setData(type + "_is_active", toggle.getData("active"));
             });
         }
     }, {

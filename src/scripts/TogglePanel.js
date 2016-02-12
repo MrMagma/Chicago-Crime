@@ -50,8 +50,8 @@ class TogglePanel extends Component {
     }
     listenToToggle(toggle, type) {
         toggle.on("change", () => {
-            this.setData(`${type}_is_active`, toggle.getData("active"));
             this.getData("active")[type] = toggle.getData("active");
+            this.setData(`${type}_is_active`, toggle.getData("active"));
         });
     }
     getToggleState(type) {

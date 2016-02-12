@@ -44,7 +44,7 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 function iconCreator(cluster) {
     var _cluster$getAllChildM = cluster.getAllChildMarkers().map(function (marker) {
-        return _constants2.default.colors[marker.options.crimeType];
+        return _constants2.default.colors[_constants2.default.typeMap[marker.options.crimeType]];
     }).reduce(function (pVal, cVal, i) {
         return {
             stroke: (pVal.stroke + cVal.stroke) / 2,
@@ -206,6 +206,7 @@ var MapPanel = function (_Component) {
         value: function displayData() {
             var dateFilter = sortDateRange(this.getData("date_filter"));
             var typeFilter = this.getData("type_filter");
+
             var crimes = _crimedata2.default.all();
             var min = dateFilter.min.getTime(),
                 max = dateFilter.max.getTime();
@@ -213,7 +214,6 @@ var MapPanel = function (_Component) {
             var allLoaded = true;
             var maxYear = dateFilter.max.getFullYear();
             for (var year = dateFilter.min.getFullYear(); year < maxYear; year++) {
-                console.log(year, _crimedata2.default.isYearRequested(year));
                 if (!_crimedata2.default.isYearRequested(year)) {
                     this.loadData(year);
                     allLoaded = false;
@@ -234,7 +234,7 @@ var MapPanel = function (_Component) {
 
                     var marker = _CrimeMarker2.default.getMarkerForCrime(crime, this.clusterer);
                     var epoch = crime.date.getTime();
-                    if (epoch >= min && epoch <= max) {
+                    if (epoch >= min && epoch <= max && typeFilter[_constants2.default.typeMap[crime.primary_type]]) {
                         marker.show();
                     } else {
                         marker.hide();

@@ -3,18 +3,22 @@ crime-style(fill-color, stroke-color)
     border 0.2em solid stroke-color
 
 .crime-type
-    // Property
+    // Theft
     &-BURGLARY
     &-ROBBERY,
     &-THEFT,
-    &-MOTOR_VEHICLE_THEFT,
+    &-MOTOR_VEHICLE_THEFT
+        crime-style #9C27B0 #D500F9
+        
+    // Property
     &-ARSON,
     &-DECEPTIVE_PRACTICE,
     &-CRIMINAL_DAMAGE
         crime-style #4CAF50 #69F0AE
     // Personal
     &-ASSAULT,
-    &-BATTERY
+    &-BATTERY,
+    &-HOMICIDE
         crime-style #F44336 #FF5252
     // Sexual
     &-CRIMINAL_SEXUAL_ABUSE,
