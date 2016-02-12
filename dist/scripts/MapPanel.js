@@ -22,6 +22,10 @@ var _LoadingOverlay = require("./LoadingOverlay.js");
 
 var _LoadingOverlay2 = _interopRequireDefault(_LoadingOverlay);
 
+var _CrimeMarker = require("./CrimeMarker.js");
+
+var _CrimeMarker2 = _interopRequireDefault(_CrimeMarker);
+
 var _crimedata = require("./crimedata.js");
 
 var _crimedata2 = _interopRequireDefault(_crimedata);
@@ -165,6 +169,8 @@ var MapPanel = function (_Component) {
         _this.initData("type_filter", typeFilter);
 
         _this.loadData();
+
+        _this.map.addLayer(_this.clusterer);
         return _this;
     }
 
@@ -195,18 +201,11 @@ var MapPanel = function (_Component) {
     }, {
         key: "displayData",
         value: function displayData() {
-            // TODO (Joshua): This is not the most performant thing to do and
-            // should be fixed in the future, but for now it'll work fine.
-            this.clusterer.clearLayers();
             var dateFilter = sortDateRange(this.getData("date_filter"));
             var typeFilter = this.getData("type_filter");
-            console.log(dateFilter);
-            var crimes = _crimedata2.default.all({
-                where: function where(crime) {
-                    var epoch = crime.date.getTime();
-                    return epoch >= dateFilter.min && epoch <= dateFilter.max;
-                }
-            });
+            var crimes = _crimedata2.default.all();
+            var min = dateFilter.min.getTime(),
+                max = dateFilter.max.getTime();
 
             var _iteratorNormalCompletion2 = true;
             var _didIteratorError2 = false;
@@ -216,14 +215,13 @@ var MapPanel = function (_Component) {
                 for (var _iterator2 = crimes[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
                     var crime = _step2.value;
 
-                    this.clusterer.addLayer(new L.Marker(L.latLng(crime.latitude, crime.longitude), {
-                        icon: L.divIcon({
-                            className: _constants2.default.css.classPrefix + "-" + crime.primary_type.replace(" ", "_") + " crime-icon",
-                            iconSize: new L.Point(18, 18)
-                        }),
-                        title: "Crime doesn't pay",
-                        crimeType: crime.primary_type
-                    }));
+                    var marker = _CrimeMarker2.default.getMarkerForCrime(crime, this.clusterer);
+                    var epoch = crime.date.getTime();
+                    if (epoch >= min && epoch <= max) {
+                        marker.show();
+                    } else {
+                        marker.hide();
+                    }
                 }
             } catch (err) {
                 _didIteratorError2 = true;
@@ -239,13 +237,11 @@ var MapPanel = function (_Component) {
                     }
                 }
             }
-
-            this.map.addLayer(this.clusterer);
         }
     }, {
         key: "handleChange",
         value: function handleChange() {
-            // this.displayData();
+            this.displayData();
         }
     }]);
 

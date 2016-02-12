@@ -3,6 +3,7 @@ import tinycolor from "tinycolor2";
 
 import Component from "./Component.js";
 import LoadingOverlay from "./LoadingOverlay.js";
+import CrimeMarker from "./CrimeMarker.js";
 import crimedata from "./crimedata.js";
 import constants from "./constants.js";
 
@@ -90,6 +91,8 @@ class MapPanel extends Component {
         this.initData("type_filter", typeFilter);
         
         this.loadData();
+        
+        this.map.addLayer(this.clusterer);
     }
     loadData() {
         let year = (new Date()).getFullYear();
@@ -111,35 +114,24 @@ class MapPanel extends Component {
         }
     }
     displayData() {
-        // TODO (Joshua): This is not the most performant thing to do and
-        // should be fixed in the future, but for now it'll work fine.
-        this.clusterer.clearLayers();
         let dateFilter = sortDateRange(this.getData("date_filter"));
         let typeFilter = this.getData("type_filter");
-        console.log(dateFilter);
-        let crimes = crimedata.all({
-            where(crime) {
-                let epoch = crime.date.getTime();
-                return (epoch >= dateFilter.min && epoch <= dateFilter.max);
-            }
-        });
+        let crimes = crimedata.all();
+        let min = dateFilter.min.getTime(),
+            max = dateFilter.max.getTime();
         
         for (let crime of crimes) {
-            this.clusterer.addLayer(new L.Marker(L.latLng(crime.latitude, crime.longitude), {
-                icon: L.divIcon({
-                    className: `${constants.css.classPrefix}-${crime
-                        .primary_type.replace(" ", "_")} crime-icon`,
-                    iconSize: new L.Point(18, 18)
-                }),
-                title: "Crime doesn't pay",
-                crimeType: crime.primary_type
-            }));
+            let marker = CrimeMarker.getMarkerForCrime(crime, this.clusterer);
+            let epoch = crime.date.getTime();
+            if (epoch >= min && epoch <= max) {
+                marker.show();
+            } else {
+                marker.hide();
+            }
         }
-        
-        this.map.addLayer(this.clusterer);
     }
     handleChange() {
-        // this.displayData();
+        this.displayData();
     }
 }
 

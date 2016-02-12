@@ -50,10 +50,10 @@ var TimePanel = function (_Component) {
             values: _constants2.default.years,
             listeners: {
                 change: function change(_ref) {
-                    var val = _ref.val;
+                    var value = _ref.value;
 
                     _this.setData("year", {
-                        min: val,
+                        min: value,
                         max: _this.getData("year").max
                     });
                 }
@@ -65,11 +65,11 @@ var TimePanel = function (_Component) {
             values: _constants2.default.years,
             listeners: {
                 change: function change(_ref2) {
-                    var val = _ref2.val;
+                    var value = _ref2.value;
 
                     _this.setData("year", {
                         min: _this.getData("year").min,
-                        max: val
+                        max: value
                     });
                 }
             }
@@ -80,10 +80,10 @@ var TimePanel = function (_Component) {
             values: _constants2.default.months,
             listeners: {
                 change: function change(_ref3) {
-                    var val = _ref3.val;
+                    var value = _ref3.value;
 
                     _this.setData("month", {
-                        min: val,
+                        min: value,
                         max: _this.getData("month").max
                     });
                 }
@@ -95,11 +95,11 @@ var TimePanel = function (_Component) {
             values: _constants2.default.months,
             listeners: {
                 change: function change(_ref4) {
-                    var val = _ref4.val;
+                    var value = _ref4.value;
 
                     _this.setData("month", {
                         min: _this.getData("month").min,
-                        max: val
+                        max: value
                     });
                 }
             }

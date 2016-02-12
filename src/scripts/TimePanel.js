@@ -17,9 +17,9 @@ class TimePanel extends Component {
             start: (new Date()).getFullYear(),
             values: constants.years,
             listeners: {
-                change: ({val}) => {
+                change: ({value}) => {
                     this.setData("year", {
-                        min: val,
+                        min: value,
                         max: this.getData("year").max
                     });
                 }
@@ -30,10 +30,10 @@ class TimePanel extends Component {
             start: (new Date()).getFullYear(),
             values: constants.years,
             listeners: {
-                change: ({val}) => {
+                change: ({value}) => {
                     this.setData("year", {
                         min: this.getData("year").min,
-                        max: val
+                        max: value
                     });
                 }
             }
@@ -43,9 +43,9 @@ class TimePanel extends Component {
             start: "Jan",
             values: constants.months,
             listeners: {
-                change: ({val}) => {
+                change: ({value}) => {
                     this.setData("month", {
-                        min: val,
+                        min: value,
                         max: this.getData("month").max
                     });
                 }
@@ -56,10 +56,10 @@ class TimePanel extends Component {
             start: "Dec",
             values: constants.months,
             listeners: {
-                change: ({val}) => {
+                change: ({value}) => {
                     this.setData("month", {
                         min: this.getData("month").min,
-                        max: val
+                        max: value
                     });
                 }
             }
