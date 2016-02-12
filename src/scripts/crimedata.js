@@ -51,7 +51,10 @@ let datautil = {
             });
 
             req.onload = (json) => {
-                crimedata.push.apply(crimedata, json
+                crimedata.push.apply(crimedata, json.map(crime => {
+                        crime.date = new Date(crime.date);
+                        return crime;
+                    })
                     .filter(val => _.isString(val.latitude) &&
                         _.isString(val.longitude)));
                 loaded = true;

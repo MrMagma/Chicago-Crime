@@ -71,6 +71,18 @@ function iconCreator(cluster) {
     return icon;
 }
 
+function sortDateRange(_ref) {
+    var min = _ref.min;
+    var max = _ref.max;
+
+    min = min.getTime();
+    max = max.getTime();
+    return {
+        min: new Date(Math.min(min, max)),
+        max: new Date(Math.max(min, max))
+    };
+}
+
 var MapPanel = function (_Component) {
     _inherits(MapPanel, _Component);
 
@@ -98,6 +110,7 @@ var MapPanel = function (_Component) {
                 max: 21
             }
         } : _cfg$bounds;
+        var range = cfg.range;
 
 
         _this.domNode = document.getElementById(el);
@@ -121,9 +134,37 @@ var MapPanel = function (_Component) {
         });
 
         _this.addChild(_this.spinner);
+        _this.on("change", _this.handleChange.bind(_this));
+        _this.initData("date_filter", range);
+        var typeFilter = {};
+        var _iteratorNormalCompletion = true;
+        var _didIteratorError = false;
+        var _iteratorError = undefined;
+
+        try {
+            for (var _iterator = _constants2.default.crimeTypes[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                var type = _step.value;
+
+                typeFilter[type] = true;
+            }
+        } catch (err) {
+            _didIteratorError = true;
+            _iteratorError = err;
+        } finally {
+            try {
+                if (!_iteratorNormalCompletion && _iterator.return) {
+                    _iterator.return();
+                }
+            } finally {
+                if (_didIteratorError) {
+                    throw _iteratorError;
+                }
+            }
+        }
+
+        _this.initData("type_filter", typeFilter);
 
         _this.loadData();
-        _this.on("change", _this.handleChange.bind(_this));
         return _this;
     }
 
@@ -154,15 +195,26 @@ var MapPanel = function (_Component) {
     }, {
         key: "displayData",
         value: function displayData() {
-            var crimes = _crimedata2.default.all();
+            // TODO (Joshua): This is not the most performant thing to do and
+            // should be fixed in the future, but for now it'll work fine.
+            this.clusterer.clearLayers();
+            var dateFilter = sortDateRange(this.getData("date_filter"));
+            var typeFilter = this.getData("type_filter");
+            console.log(dateFilter);
+            var crimes = _crimedata2.default.all({
+                where: function where(crime) {
+                    var epoch = crime.date.getTime();
+                    return epoch >= dateFilter.min && epoch <= dateFilter.max;
+                }
+            });
 
-            var _iteratorNormalCompletion = true;
-            var _didIteratorError = false;
-            var _iteratorError = undefined;
+            var _iteratorNormalCompletion2 = true;
+            var _didIteratorError2 = false;
+            var _iteratorError2 = undefined;
 
             try {
-                for (var _iterator = crimes[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-                    var crime = _step.value;
+                for (var _iterator2 = crimes[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+                    var crime = _step2.value;
 
                     this.clusterer.addLayer(new L.Marker(L.latLng(crime.latitude, crime.longitude), {
                         icon: L.divIcon({
@@ -174,16 +226,16 @@ var MapPanel = function (_Component) {
                     }));
                 }
             } catch (err) {
-                _didIteratorError = true;
-                _iteratorError = err;
+                _didIteratorError2 = true;
+                _iteratorError2 = err;
             } finally {
                 try {
-                    if (!_iteratorNormalCompletion && _iterator.return) {
-                        _iterator.return();
+                    if (!_iteratorNormalCompletion2 && _iterator2.return) {
+                        _iterator2.return();
                     }
                 } finally {
-                    if (_didIteratorError) {
-                        throw _iteratorError;
+                    if (_didIteratorError2) {
+                        throw _iteratorError2;
                     }
                 }
             }
@@ -192,7 +244,9 @@ var MapPanel = function (_Component) {
         }
     }, {
         key: "handleChange",
-        value: function handleChange() {}
+        value: function handleChange() {
+            // this.displayData();
+        }
     }]);
 
     return MapPanel;

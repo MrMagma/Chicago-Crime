@@ -39,6 +39,15 @@ function iconCreator(cluster) {
     return icon;
 }
 
+function sortDateRange({min, max}) {
+    min = min.getTime();
+    max = max.getTime();
+    return {
+        min: new Date(Math.min(min, max)),
+        max: new Date(Math.max(min, max))
+    };
+}
+
 class MapPanel extends Component {
     constructor(cfg = {}) {
         super(cfg);
@@ -49,7 +58,7 @@ class MapPanel extends Component {
                 min: 10,
                 max: 21
             }
-        }} = cfg;
+        }, range} = cfg;
         
         this.domNode = document.getElementById(el);
         this.map = L.mapbox.map(this.domNode, "mapbox.streets", {
@@ -72,9 +81,15 @@ class MapPanel extends Component {
         });
         
         this.addChild(this.spinner);
+        this.on("change", this.handleChange.bind(this));
+        this.initData("date_filter", range);
+        let typeFilter = {};
+        for (let type of constants.crimeTypes) {
+            typeFilter[type] = true;
+        }
+        this.initData("type_filter", typeFilter);
         
         this.loadData();
-        this.on("change", this.handleChange.bind(this));
     }
     loadData() {
         let year = (new Date()).getFullYear();
@@ -96,7 +111,18 @@ class MapPanel extends Component {
         }
     }
     displayData() {
-        let crimes = crimedata.all();
+        // TODO (Joshua): This is not the most performant thing to do and
+        // should be fixed in the future, but for now it'll work fine.
+        this.clusterer.clearLayers();
+        let dateFilter = sortDateRange(this.getData("date_filter"));
+        let typeFilter = this.getData("type_filter");
+        console.log(dateFilter);
+        let crimes = crimedata.all({
+            where(crime) {
+                let epoch = crime.date.getTime();
+                return (epoch >= dateFilter.min && epoch <= dateFilter.max);
+            }
+        });
         
         for (let crime of crimes) {
             this.clusterer.addLayer(new L.Marker(L.latLng(crime.latitude, crime.longitude), {
@@ -113,7 +139,7 @@ class MapPanel extends Component {
         this.map.addLayer(this.clusterer);
     }
     handleChange() {
-        
+        // this.displayData();
     }
 }
 

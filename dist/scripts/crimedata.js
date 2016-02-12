@@ -86,7 +86,10 @@ var datautil = {
             });
 
             req.onload = function (json) {
-                crimedata.push.apply(crimedata, json.filter(function (val) {
+                crimedata.push.apply(crimedata, json.map(function (crime) {
+                    crime.date = new Date(crime.date);
+                    return crime;
+                }).filter(function (val) {
                     return _underscore2.default.isString(val.latitude) && _underscore2.default.isString(val.longitude);
                 }));
                 loaded = true;
