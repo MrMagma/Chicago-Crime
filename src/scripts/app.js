@@ -3,6 +3,7 @@ import "underscore";
 import MapPanel from "./MapPanel.js";
 import TimePanel from "./TimePanel.js";
 import TogglePanel from "./TogglePanel.js";
+import FactsPanel from "./FactsPanel.js";
 import constants from "./constants.js";
 
 function afterLoad() {
@@ -10,7 +11,7 @@ function afterLoad() {
     
     var cYear = (new Date()).getFullYear();
     
-    var timePanel, togglePanel, map;
+    var timePanel, togglePanel, factsPanel, map;
     
     timePanel = new TimePanel({
         el: "time-controls",
@@ -42,6 +43,10 @@ function afterLoad() {
                 map.setData("type_filter", togglePanel.getData("active"));
             }
         }
+    });
+    
+    factsPanel = new FactsPanel({
+        el: "facts-panel"
     });
     
     map = new MapPanel({

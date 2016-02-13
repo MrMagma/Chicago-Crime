@@ -14,6 +14,10 @@ var _TogglePanel = require("./TogglePanel.js");
 
 var _TogglePanel2 = _interopRequireDefault(_TogglePanel);
 
+var _FactsPanel = require("./FactsPanel.js");
+
+var _FactsPanel2 = _interopRequireDefault(_FactsPanel);
+
 var _constants = require("./constants.js");
 
 var _constants2 = _interopRequireDefault(_constants);
@@ -25,7 +29,7 @@ function afterLoad() {
 
     var cYear = new Date().getFullYear();
 
-    var timePanel, togglePanel, map;
+    var timePanel, togglePanel, factsPanel, map;
 
     timePanel = new _TimePanel2.default({
         el: "time-controls",
@@ -57,6 +61,10 @@ function afterLoad() {
                 map.setData("type_filter", togglePanel.getData("active"));
             }
         }
+    });
+
+    factsPanel = new _FactsPanel2.default({
+        el: "facts-panel"
     });
 
     map = new _MapPanel2.default({
