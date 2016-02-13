@@ -23,7 +23,7 @@ var CrimeMarker = function () {
         this.crime = crime;
         this.marker = new L.Marker(L.latLng(crime.latitude, crime.longitude), {
             icon: L.divIcon({
-                className: _constants2.default.css.classPrefix + "-" + crime.primary_type.replace(/ /g, "_") + " crime-icon",
+                className: _constants2.default.css.classPrefix + "-" + crime.primary_type.replace(/ /g, "_") + " crime-icon single-crime-icon",
                 iconSize: new L.Point(18, 18)
             }),
             title: crime.primary_type,
@@ -32,6 +32,7 @@ var CrimeMarker = function () {
         this.clusterer = clusterer;
         this.shown = false;
         this.id = crime.id;
+        this.hideTimeout = null;
 
         this.show();
     }
@@ -40,15 +41,23 @@ var CrimeMarker = function () {
         key: "show",
         value: function show() {
             if (!this.shown) {
+                clearTimeout(this.hideTimeout);
                 this.clusterer.addLayer(this.marker);
+                this.marker.setOpacity(1);
                 this.shown = true;
             }
         }
     }, {
         key: "hide",
         value: function hide() {
+            var _this = this;
+
             if (this.shown) {
-                this.clusterer.removeLayer(this.marker);
+                clearTimeout(this.hideTimeout);
+                this.marker.setOpacity(0);
+                this.hideTimeout = setTimeout(function () {
+                    _this.clusterer.removeLayer(_this.marker);
+                }, 300);
                 this.shown = false;
             }
         }
