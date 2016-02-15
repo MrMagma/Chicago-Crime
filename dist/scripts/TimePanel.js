@@ -4,6 +4,8 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
 var _Component2 = require("./Component.js");
 
 var _Component3 = _interopRequireDefault(_Component2);
@@ -11,6 +13,10 @@ var _Component3 = _interopRequireDefault(_Component2);
 var _FancySelect = require("./FancySelect.js");
 
 var _FancySelect2 = _interopRequireDefault(_FancySelect);
+
+var _datahub = require("./datahub.js");
+
+var _datahub2 = _interopRequireDefault(_datahub);
 
 var _constants = require("./constants.js");
 
@@ -104,8 +110,25 @@ var TimePanel = function (_Component) {
                 }
             }
         });
+
+        _this.on("change", _this.handleChange.bind(_this));
         return _this;
     }
+
+    _createClass(TimePanel, [{
+        key: "handleChange",
+        value: function handleChange() {
+            var year = this.getData("year");
+            var month = this.getData("month");
+            _datahub2.default.setData("date_filter", {
+                min: new Date(month.min + " " + year.min),
+                max: new Date(month.max + " " + year.max)
+            });
+            _datahub2.default.fire("filter_changed", {
+                filterKey: "date_filter"
+            });
+        }
+    }]);
 
     return TimePanel;
 }(_Component3.default);

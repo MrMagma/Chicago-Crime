@@ -22,27 +22,12 @@ function afterLoad() {
         month: {
             min: "Jan",
             max: "Dec"
-        },
-        listeners: {
-            change() {
-                let year = timePanel.getData("year");
-                let month = timePanel.getData("month");
-                map.setData("date_filter", {
-                    min: new Date(`${month.min} ${year.min}`),
-                    max: new Date(`${month.max} ${year.max}`)
-                });
-            }
         }
     });
     
     togglePanel = new TogglePanel({
         el: "crime-toggles",
-        types: constants.crimeTypes,
-        listeners: {
-            change() {
-                map.setData("type_filter", togglePanel.getData("active"));
-            }
-        }
+        types: constants.crimeTypes
     });
     
     pieChart = new PieChart({

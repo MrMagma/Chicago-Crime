@@ -1,4 +1,5 @@
 import Component from "./Component.js";
+import hub from "./datahub.js";
 
 class Toggle extends Component {
     constructor(cfg = {}) {
@@ -47,6 +48,7 @@ class TogglePanel extends Component {
             this.listenToToggle(toggle, type);
             this.addChild(toggle);
         }
+        this.on("change", this.handleChange.bind(this));
     }
     listenToToggle(toggle, type) {
         toggle.on("change", () => {
@@ -56,6 +58,12 @@ class TogglePanel extends Component {
     }
     getToggleState(type) {
         return this.getData(`${type}_is_active`);
+    }
+    handleChange() {
+        hub.setData("type_filter", this.getData("active"));
+        hub.emit("filter_changed", {
+            filterKey: "type_filter"
+        });
     }
 }
 

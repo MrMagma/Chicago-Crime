@@ -34,6 +34,10 @@ var _constants = require("./constants.js");
 
 var _constants2 = _interopRequireDefault(_constants);
 
+var _datahub = require("./datahub.js");
+
+var _datahub2 = _interopRequireDefault(_datahub);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -171,6 +175,7 @@ var MapPanel = function (_Component) {
         _this.loadData();
 
         _this.map.addLayer(_this.clusterer);
+        _datahub2.default.on("filter_changed", _this.handleFilterChange.bind(_this));
         return _this;
     }
 
@@ -259,6 +264,16 @@ var MapPanel = function (_Component) {
         key: "handleChange",
         value: function handleChange() {
             this.displayData();
+        }
+    }, {
+        key: "handleFilterChange",
+        value: function handleFilterChange(_ref2) {
+            var filterKey = _ref2.filterKey;
+
+            if (!/filter$/.test(filterKey)) {
+                return;
+            }
+            this.setData(filterKey, _datahub2.default.getData(filterKey));
         }
     }]);
 

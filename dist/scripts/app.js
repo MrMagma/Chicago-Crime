@@ -40,27 +40,12 @@ function afterLoad() {
         month: {
             min: "Jan",
             max: "Dec"
-        },
-        listeners: {
-            change: function change() {
-                var year = timePanel.getData("year");
-                var month = timePanel.getData("month");
-                map.setData("date_filter", {
-                    min: new Date(month.min + " " + year.min),
-                    max: new Date(month.max + " " + year.max)
-                });
-            }
         }
     });
 
     togglePanel = new _TogglePanel2.default({
         el: "crime-toggles",
-        types: _constants2.default.crimeTypes,
-        listeners: {
-            change: function change() {
-                map.setData("type_filter", togglePanel.getData("active"));
-            }
-        }
+        types: _constants2.default.crimeTypes
     });
 
     pieChart = new _PieChart2.default({

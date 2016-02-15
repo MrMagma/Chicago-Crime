@@ -10,6 +10,10 @@ var _Component3 = require("./Component.js");
 
 var _Component4 = _interopRequireDefault(_Component3);
 
+var _datahub = require("./datahub.js");
+
+var _datahub2 = _interopRequireDefault(_datahub);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -113,6 +117,7 @@ var TogglePanel = function (_Component2) {
             }
         }
 
+        _this2.on("change", _this2.handleChange.bind(_this2));
         return _this2;
     }
 
@@ -130,6 +135,14 @@ var TogglePanel = function (_Component2) {
         key: "getToggleState",
         value: function getToggleState(type) {
             return this.getData(type + "_is_active");
+        }
+    }, {
+        key: "handleChange",
+        value: function handleChange() {
+            _datahub2.default.setData("type_filter", this.getData("active"));
+            _datahub2.default.emit("filter_changed", {
+                filterKey: "type_filter"
+            });
         }
     }]);
 

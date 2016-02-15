@@ -6,6 +6,7 @@ import LoadingOverlay from "./LoadingOverlay.js";
 import CrimeMarker from "./CrimeMarker.js";
 import crimedata from "./crimedata.js";
 import constants from "./constants.js";
+import hub from "./datahub.js";
 
 function iconCreator(cluster) {
     let {stroke, fill} = cluster.getAllChildMarkers()
@@ -93,6 +94,7 @@ class MapPanel extends Component {
         this.loadData();
         
         this.map.addLayer(this.clusterer);
+        hub.on("filter_changed", this.handleFilterChange.bind(this));
     }
     loadData(year = (new Date()).getFullYear()) {
         if (!crimedata.hasYearLoaded(year)) {
@@ -148,6 +150,12 @@ class MapPanel extends Component {
     }
     handleChange() {
         this.displayData();
+    }
+    handleFilterChange({filterKey}) {
+        if (!/filter$/.test(filterKey)) {
+            return;
+        }
+        this.setData(filterKey, hub.getData(filterKey));
     }
 }
 

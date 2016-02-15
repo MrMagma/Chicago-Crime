@@ -1,5 +1,6 @@
 import Component from "./Component.js";
 import FancySelect from "./FancySelect.js";
+import hub from "./datahub.js";
 import constants from "./constants.js";
 
 class TimePanel extends Component {
@@ -63,6 +64,19 @@ class TimePanel extends Component {
                     });
                 }
             }
+        });
+        
+        this.on("change", this.handleChange.bind(this));
+    }
+    handleChange() {
+        let year = this.getData("year");
+        let month = this.getData("month");
+        hub.setData("date_filter", {
+            min: new Date(`${month.min} ${year.min}`),
+            max: new Date(`${month.max} ${year.max}`)
+        });
+        hub.fire("filter_changed", {
+            filterKey: "date_filter"
         });
     }
 }
