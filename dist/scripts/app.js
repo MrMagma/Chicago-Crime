@@ -14,9 +14,9 @@ var _TogglePanel = require("./TogglePanel.js");
 
 var _TogglePanel2 = _interopRequireDefault(_TogglePanel);
 
-var _FactsPanel = require("./FactsPanel.js");
+var _PieChart = require("./PieChart.js");
 
-var _FactsPanel2 = _interopRequireDefault(_FactsPanel);
+var _PieChart2 = _interopRequireDefault(_PieChart);
 
 var _constants = require("./constants.js");
 
@@ -29,7 +29,7 @@ function afterLoad() {
 
     var cYear = new Date().getFullYear();
 
-    var timePanel, togglePanel, factsPanel, map;
+    var timePanel, togglePanel, pieChart, map;
 
     timePanel = new _TimePanel2.default({
         el: "time-controls",
@@ -63,8 +63,12 @@ function afterLoad() {
         }
     });
 
-    factsPanel = new _FactsPanel2.default({
-        el: "facts-panel"
+    pieChart = new _PieChart2.default({
+        el: "crime-breakdown-chart",
+        data: [{
+            percent: 20,
+            color: "red"
+        }]
     });
 
     map = new _MapPanel2.default({
@@ -98,7 +102,7 @@ function afterLoad() {
 
 var interval = setInterval(function () {
     if (document.readyState === "complete") {
-        afterLoad();
         clearInterval(interval);
+        afterLoad();
     }
 }, 10);

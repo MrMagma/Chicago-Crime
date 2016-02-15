@@ -103,9 +103,9 @@ var Component = function (_DataStore) {
             this.fire("child_removed", child);
         }
     }, {
-        key: "appendTo",
-        value: function appendTo(container) {
-            container.appendChild(this);
+        key: "addTo",
+        value: function addTo(container) {
+            container.addChild(this);
         }
     }, {
         key: "appendToDomNode",

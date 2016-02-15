@@ -7,9 +7,9 @@ class CrimeMarker {
         this.crime = crime;
         this.marker = new L.Marker(L.latLng(crime.latitude, crime.longitude), {
             icon: L.divIcon({
-                className: `${constants.css.classPrefix}-${crime
-                    .primary_type
-                    .replace(/ /g, "_")} crime-icon single-crime-icon`,
+                className: `${constants.css.classPrefix}-${constants
+                    .typeMap[crime.primary_type].replace(/ /g,
+                        "_")} crime-icon single-crime-icon`,
                 iconSize: new L.Point(18, 18)
             }),
             title: crime.primary_type,

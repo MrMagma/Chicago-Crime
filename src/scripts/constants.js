@@ -107,5 +107,15 @@ export default {
         "domestic",
         "substances",
         "other"
-    ]
+    ],
+    crimeIds: {
+        "theft": 0,
+        "property": 1,
+        "personal": 2,
+        "sexual": 3,
+        "minor": 4,
+        "domestic": 5,
+        "substances": 6,
+        "other": 7
+    }
 };

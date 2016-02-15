@@ -43,8 +43,8 @@ class Component extends DataStore {
         this.domNode.removeChild(child.domNode);
         this.fire("child_removed", child);
     }
-    appendTo(container) {
-        container.appendChild(this);
+    addTo(container) {
+        container.addChild(this);
     }
     appendToDomNode(node) {
         node.appendChild(this.domNode);

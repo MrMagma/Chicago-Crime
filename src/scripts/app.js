@@ -3,7 +3,7 @@ import "underscore";
 import MapPanel from "./MapPanel.js";
 import TimePanel from "./TimePanel.js";
 import TogglePanel from "./TogglePanel.js";
-import FactsPanel from "./FactsPanel.js";
+import PieChart from "./PieChart.js";
 import constants from "./constants.js";
 
 function afterLoad() {
@@ -11,7 +11,7 @@ function afterLoad() {
     
     var cYear = (new Date()).getFullYear();
     
-    var timePanel, togglePanel, factsPanel, map;
+    var timePanel, togglePanel, pieChart, map;
     
     timePanel = new TimePanel({
         el: "time-controls",
@@ -45,8 +45,14 @@ function afterLoad() {
         }
     });
     
-    factsPanel = new FactsPanel({
-        el: "facts-panel"
+    pieChart = new PieChart({
+        el: "crime-breakdown-chart",
+        data: [
+            {
+                percent: 20,
+                color: "red"
+            }
+        ]
     });
     
     map = new MapPanel({
@@ -80,7 +86,7 @@ function afterLoad() {
 
 var interval = setInterval(function() {
     if (document.readyState === "complete") {
-        afterLoad();
         clearInterval(interval);
+        afterLoad();
     }
 }, 10);

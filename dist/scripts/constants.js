@@ -83,5 +83,15 @@ exports.default = {
     },
     months: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
     years: [2011, 2012, 2013, 2014, 2015, 2016],
-    crimeTypes: ["theft", "property", "personal", "sexual", "minor", "domestic", "substances", "other"]
+    crimeTypes: ["theft", "property", "personal", "sexual", "minor", "domestic", "substances", "other"],
+    crimeIds: {
+        "theft": 0,
+        "property": 1,
+        "personal": 2,
+        "sexual": 3,
+        "minor": 4,
+        "domestic": 5,
+        "substances": 6,
+        "other": 7
+    }
 };
