@@ -140,7 +140,7 @@ var TogglePanel = function (_Component2) {
         key: "handleChange",
         value: function handleChange() {
             _datahub2.default.setData("type_filter", this.getData("active"));
-            _datahub2.default.emit("filter_changed", {
+            _datahub2.default.fire("filter_changed", {
                 filterKey: "type_filter"
             });
         }

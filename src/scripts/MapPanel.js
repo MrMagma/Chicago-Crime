@@ -7,6 +7,7 @@ import CrimeMarker from "./CrimeMarker.js";
 import crimedata from "./crimedata.js";
 import constants from "./constants.js";
 import hub from "./datahub.js";
+import filtercrimes from "./util/filtercrimes.js";
 
 function iconCreator(cluster) {
     let {stroke, fill} = cluster.getAllChildMarkers()
@@ -84,12 +85,6 @@ class MapPanel extends Component {
         
         this.addChild(this.spinner);
         this.on("change", this.handleChange.bind(this));
-        this.initData("date_filter", range);
-        let typeFilter = {};
-        for (let type of constants.crimeTypes) {
-            typeFilter[type] = true;
-        }
-        this.initData("type_filter", typeFilter);
         
         this.loadData();
         
@@ -117,31 +112,20 @@ class MapPanel extends Component {
         }
     }
     displayData() {
-        let dateFilter = sortDateRange(this.getData("date_filter"));
-        let typeFilter = this.getData("type_filter");
+        let {crimes, notLoaded} = filtercrimes(true);
         
-        let crimes = crimedata.all();
-        let min = dateFilter.min.getTime(),
-            max = dateFilter.max.getTime();
-        
-        let allLoaded = true;
-        let maxYear = dateFilter.max.getFullYear();
-        for (let year = dateFilter.min.getFullYear(); year < maxYear; year++) {
-            if (!crimedata.isYearRequested(year)) {
-                this.loadData(year);
-                allLoaded = false;
+        if (notLoaded.length > 0) {
+            for (let year of notLoaded) {
+                if (!crimedata.isYearRequested(year)) {
+                    this.loadData(year);
+                }
             }
-        }
-        
-        if (!allLoaded) {
             return;
         }
         
-        for (let crime of crimes) {
+        for (let {crime, show} of crimes) {
             let marker = CrimeMarker.getMarkerForCrime(crime, this.clusterer);
-            let epoch = crime.date.getTime();
-            if (epoch >= min && epoch <= max &&
-                typeFilter[constants.typeMap[crime.primary_type]]) {
+            if (show) {
                 marker.show();
             } else {
                 marker.hide();

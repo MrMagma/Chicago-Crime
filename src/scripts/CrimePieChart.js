@@ -1,5 +1,11 @@
+import _ from "underscore";
+
 import Component from "./Component.js";
 import tinycolor from "tinycolor2";
+import hub from "./datahub.js";
+import crimedata from "./crimedata.js";
+import filtercrimes from "./util/filtercrimes.js";
+import constants from "./constants.js";
 
 /* Taken from StackOverflow: http://stackoverflow.com/a/18473154 */
 function polarToCartesian(centerX, centerY, radius, angleInDegrees) {
@@ -40,7 +46,9 @@ class PieSlice extends Component {
         
         this.domNode.appendChild(this.arcNode);
         this.domNode.appendChild(this.triNode);
+        
         this.update();
+        this.parent.addChild(this);
     }
     update() {
         let pos1 = polarToCartesian(this.parent.x, this.parent.y,
@@ -51,36 +59,87 @@ class PieSlice extends Component {
         this.arcNode.setAttribute("d", describeArc(this.parent.x, this.parent.y,
             this.parent.radius, this.start, this.start + this.amt));
         this.arcNode.setAttribute("fill", this.color.toHexString());
+        this.arcNode.setAttribute("stroke-width", 1);
+        this.arcNode.setAttribute("stroke", this.color.toHexString());
         this.triNode.setAttribute("d",
             `M50 50 L${pos1.x} ${pos1.y} L${pos2.x} ${pos2.y}`);
         this.triNode.setAttribute("fill", this.color.toHexString());
+        this.triNode.setAttribute("stroke-width", 1);
+        this.triNode.setAttribute("stroke", this.color.toHexString());
+    }
+    setDisplay({start = this.start, amt = this.amt}) {
+        this.start = start;
+        this.amt = amt;
     }
 }
 
-export class PieChart extends Component {
-    constructor(dat) {
-        super(dat);
-        let {data, el} = dat;
+export class CrimePieChart extends Component {
+    constructor(data) {
+        super(data);
+        let {el} = data;
         this.domNode = document.getElementById(el);
-        this.data = data.map(json => JSON.parse(JSON.stringify(json)));
         this.x = 50;
         this.y = 50;
         this.radius = 40;
+        this.slices = [];
+        
+        let year = (new Date()).getFullYear();
+        if (!crimedata.hasYearLoaded(year)) {
+            crimedata.onYearLoad(year, this.initData.bind(this));
+        }
+        
+        hub.on("data_loaded", this.displayData.bind(this));
+    }
+    getCrimeCounts() {
+        let counts = Array.apply(null, Array(constants.crimeTypes.length))
+            .map(function() {return 0;});
+        
+        let {crimes, allLoaded} = filtercrimes();
+        let total = 0;
+        
+        for (let {crime, show} of crimes) {
+            if (show) {
+                total += 1;
+                counts[constants.crimeIds[constants.typeMap[crime.primary_type]]] += 1;
+            }
+        }
+        
+        return {
+            counts: counts,
+            total: total
+        };
+    }
+    initData() {
+        let {counts, total} = this.getCrimeCounts();
+        let start = 0;
+        
+        let slices = counts.map((val, i) => {
+            let amt = val / total * 360;
+            
+            let n = new PieSlice({
+                parent: this,
+                color: constants.colors[constants.crimeTypes[i]].fill
+            }, start, amt);
+            start += amt;
+            return n;
+        });
         
         this.displayData();
     }
     displayData() {
+        let {counts, total} = this.getCrimeCounts();
+        
         let start = 0;
-        for (let dataEl of this.data) {
-            dataEl.parent = this;
-            let amt = dataEl.percent / 100 * 360;
-            this.addChild(new PieSlice(dataEl, start, amt));
+        
+        for (let i = 0; i < this.slices.length; i++) {
+            let amt = counts[i] / total * 360;
+            this.slices[i].setDisplay({
+                start: start,
+                amt: amt
+            });
             start += amt;
         }
     }
-    addData(data) {
-        
-    }
 }
 
-export default PieChart;
+export default CrimePieChart;

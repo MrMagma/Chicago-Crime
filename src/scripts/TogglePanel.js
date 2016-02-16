@@ -61,7 +61,7 @@ class TogglePanel extends Component {
     }
     handleChange() {
         hub.setData("type_filter", this.getData("active"));
-        hub.emit("filter_changed", {
+        hub.fire("filter_changed", {
             filterKey: "type_filter"
         });
     }

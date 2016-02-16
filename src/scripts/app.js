@@ -3,17 +3,26 @@ import "underscore";
 import MapPanel from "./MapPanel.js";
 import TimePanel from "./TimePanel.js";
 import TogglePanel from "./TogglePanel.js";
-import PieChart from "./PieChart.js";
+import CrimePieChart from "./CrimePieChart.js";
 import constants from "./constants.js";
+import hub from "./datahub.js";
 
 function afterLoad() {
     L.mapbox.accessToken = "pk.eyJ1IjoibXJtYWdtYSIsImEiOiJjaWs3ZmI3YWYwMWZjcGlrc25uenkxeWoyIn0.dRTC3GgeeJLxvh5RrzBogw";
     
     var cYear = (new Date()).getFullYear();
     
-    var timePanel, togglePanel, pieChart, map;
+    hub.initData("date_filter", {
+        min: new Date(`Jan ${cYear}`),
+        max: new Date(`Dec 31 ${cYear}`)
+    });
+    let typeFilter = {};
+    for (let type of constants.crimeTypes) {
+        typeFilter[type] = true;
+    }
+    hub.initData("type_filter", typeFilter);
     
-    timePanel = new TimePanel({
+    new TimePanel({
         el: "time-controls",
         year: {
             min: "2016",
@@ -25,29 +34,19 @@ function afterLoad() {
         }
     });
     
-    togglePanel = new TogglePanel({
+    new TogglePanel({
         el: "crime-toggles",
         types: constants.crimeTypes
     });
     
-    pieChart = new PieChart({
-        el: "crime-breakdown-chart",
-        data: [
-            {
-                percent: 20,
-                color: "red"
-            }
-        ]
+    new CrimePieChart({
+        el: "crime-breakdown-chart"
     });
     
-    map = new MapPanel({
+    new MapPanel({
         lat: (constants.map.southWest.lat + constants.map.northEast.lat) / 2,
         lng: (constants.map.southWest.lng + constants.map.northEast.lng) / 2,
         zoom: 10,
-        range: {
-            min: new Date(`Jan ${cYear}`),
-            max: new Date(`Dec 31 ${cYear}`)
-        },
         bounds: {
             southWest: constants.map.southWest,
             northEast: constants.map.northEast,

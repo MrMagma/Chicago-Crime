@@ -3,9 +3,13 @@
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-exports.PieChart = undefined;
+exports.CrimePieChart = undefined;
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _underscore = require("underscore");
+
+var _underscore2 = _interopRequireDefault(_underscore);
 
 var _Component3 = require("./Component.js");
 
@@ -14,6 +18,22 @@ var _Component4 = _interopRequireDefault(_Component3);
 var _tinycolor = require("tinycolor2");
 
 var _tinycolor2 = _interopRequireDefault(_tinycolor);
+
+var _datahub = require("./datahub.js");
+
+var _datahub2 = _interopRequireDefault(_datahub);
+
+var _crimedata = require("./crimedata.js");
+
+var _crimedata2 = _interopRequireDefault(_crimedata);
+
+var _filtercrimes2 = require("./util/filtercrimes.js");
+
+var _filtercrimes3 = _interopRequireDefault(_filtercrimes2);
+
+var _constants = require("./constants.js");
+
+var _constants2 = _interopRequireDefault(_constants);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -66,7 +86,9 @@ var PieSlice = function (_Component) {
 
         _this.domNode.appendChild(_this.arcNode);
         _this.domNode.appendChild(_this.triNode);
+
         _this.update();
+        _this.parent.addChild(_this);
         return _this;
     }
 
@@ -78,53 +100,82 @@ var PieSlice = function (_Component) {
 
             this.arcNode.setAttribute("d", describeArc(this.parent.x, this.parent.y, this.parent.radius, this.start, this.start + this.amt));
             this.arcNode.setAttribute("fill", this.color.toHexString());
+            this.arcNode.setAttribute("stroke-width", 1);
+            this.arcNode.setAttribute("stroke", this.color.toHexString());
             this.triNode.setAttribute("d", "M50 50 L" + pos1.x + " " + pos1.y + " L" + pos2.x + " " + pos2.y);
             this.triNode.setAttribute("fill", this.color.toHexString());
+            this.triNode.setAttribute("stroke-width", 1);
+            this.triNode.setAttribute("stroke", this.color.toHexString());
+        }
+    }, {
+        key: "setDisplay",
+        value: function setDisplay(_ref) {
+            var _ref$start = _ref.start;
+            var start = _ref$start === undefined ? this.start : _ref$start;
+            var _ref$amt = _ref.amt;
+            var amt = _ref$amt === undefined ? this.amt : _ref$amt;
+
+            this.start = start;
+            this.amt = amt;
         }
     }]);
 
     return PieSlice;
 }(_Component4.default);
 
-var PieChart = exports.PieChart = function (_Component2) {
-    _inherits(PieChart, _Component2);
+var CrimePieChart = exports.CrimePieChart = function (_Component2) {
+    _inherits(CrimePieChart, _Component2);
 
-    function PieChart(dat) {
-        _classCallCheck(this, PieChart);
+    function CrimePieChart(data) {
+        _classCallCheck(this, CrimePieChart);
 
-        var _this2 = _possibleConstructorReturn(this, Object.getPrototypeOf(PieChart).call(this, dat));
+        var _this2 = _possibleConstructorReturn(this, Object.getPrototypeOf(CrimePieChart).call(this, data));
 
-        var data = dat.data;
-        var el = dat.el;
+        var el = data.el;
 
         _this2.domNode = document.getElementById(el);
-        _this2.data = data.map(function (json) {
-            return JSON.parse(JSON.stringify(json));
-        });
         _this2.x = 50;
         _this2.y = 50;
         _this2.radius = 40;
+        _this2.slices = [];
 
-        _this2.displayData();
+        var year = new Date().getFullYear();
+        if (!_crimedata2.default.hasYearLoaded(year)) {
+            _crimedata2.default.onYearLoad(year, _this2.initData.bind(_this2));
+        }
+
+        _datahub2.default.on("data_loaded", _this2.displayData.bind(_this2));
         return _this2;
     }
 
-    _createClass(PieChart, [{
-        key: "displayData",
-        value: function displayData() {
-            var start = 0;
+    _createClass(CrimePieChart, [{
+        key: "getCrimeCounts",
+        value: function getCrimeCounts() {
+            var counts = Array.apply(null, Array(_constants2.default.crimeTypes.length)).map(function () {
+                return 0;
+            });
+
+            var _filtercrimes = (0, _filtercrimes3.default)();
+
+            var crimes = _filtercrimes.crimes;
+            var allLoaded = _filtercrimes.allLoaded;
+
+            var total = 0;
+
             var _iteratorNormalCompletion = true;
             var _didIteratorError = false;
             var _iteratorError = undefined;
 
             try {
-                for (var _iterator = this.data[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-                    var dataEl = _step.value;
+                for (var _iterator = crimes[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                    var _step$value = _step.value;
+                    var crime = _step$value.crime;
+                    var show = _step$value.show;
 
-                    dataEl.parent = this;
-                    var amt = dataEl.percent / 100 * 360;
-                    this.addChild(new PieSlice(dataEl, start, amt));
-                    start += amt;
+                    if (show) {
+                        total += 1;
+                        counts[_constants2.default.crimeIds[_constants2.default.typeMap[crime.primary_type]]] += 1;
+                    }
                 }
             } catch (err) {
                 _didIteratorError = true;
@@ -140,13 +191,60 @@ var PieChart = exports.PieChart = function (_Component2) {
                     }
                 }
             }
+
+            return {
+                counts: counts,
+                total: total
+            };
         }
     }, {
-        key: "addData",
-        value: function addData(data) {}
+        key: "initData",
+        value: function initData() {
+            var _this3 = this;
+
+            var _getCrimeCounts = this.getCrimeCounts();
+
+            var counts = _getCrimeCounts.counts;
+            var total = _getCrimeCounts.total;
+
+            var start = 0;
+
+            var slices = counts.map(function (val, i) {
+                var amt = val / total * 360;
+
+                var n = new PieSlice({
+                    parent: _this3,
+                    color: _constants2.default.colors[_constants2.default.crimeTypes[i]].fill
+                }, start, amt);
+                start += amt;
+                return n;
+            });
+
+            this.displayData();
+        }
+    }, {
+        key: "displayData",
+        value: function displayData() {
+            var _getCrimeCounts2 = this.getCrimeCounts();
+
+            var counts = _getCrimeCounts2.counts;
+            var total = _getCrimeCounts2.total;
+
+
+            var start = 0;
+
+            for (var i = 0; i < this.slices.length; i++) {
+                var amt = counts[i] / total * 360;
+                this.slices[i].setDisplay({
+                    start: start,
+                    amt: amt
+                });
+                start += amt;
+            }
+        }
     }]);
 
-    return PieChart;
+    return CrimePieChart;
 }(_Component4.default);
 
-exports.default = PieChart;
+exports.default = CrimePieChart;

@@ -38,6 +38,10 @@ var _datahub = require("./datahub.js");
 
 var _datahub2 = _interopRequireDefault(_datahub);
 
+var _filtercrimes2 = require("./util/filtercrimes.js");
+
+var _filtercrimes3 = _interopRequireDefault(_filtercrimes2);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -143,34 +147,6 @@ var MapPanel = function (_Component) {
 
         _this.addChild(_this.spinner);
         _this.on("change", _this.handleChange.bind(_this));
-        _this.initData("date_filter", range);
-        var typeFilter = {};
-        var _iteratorNormalCompletion = true;
-        var _didIteratorError = false;
-        var _iteratorError = undefined;
-
-        try {
-            for (var _iterator = _constants2.default.crimeTypes[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-                var type = _step.value;
-
-                typeFilter[type] = true;
-            }
-        } catch (err) {
-            _didIteratorError = true;
-            _iteratorError = err;
-        } finally {
-            try {
-                if (!_iteratorNormalCompletion && _iterator.return) {
-                    _iterator.return();
-                }
-            } finally {
-                if (_didIteratorError) {
-                    throw _iteratorError;
-                }
-            }
-        }
-
-        _this.initData("type_filter", typeFilter);
 
         _this.loadData();
 
@@ -209,23 +185,40 @@ var MapPanel = function (_Component) {
     }, {
         key: "displayData",
         value: function displayData() {
-            var dateFilter = sortDateRange(this.getData("date_filter"));
-            var typeFilter = this.getData("type_filter");
+            var _filtercrimes = (0, _filtercrimes3.default)(true);
 
-            var crimes = _crimedata2.default.all();
-            var min = dateFilter.min.getTime(),
-                max = dateFilter.max.getTime();
+            var crimes = _filtercrimes.crimes;
+            var notLoaded = _filtercrimes.notLoaded;
 
-            var allLoaded = true;
-            var maxYear = dateFilter.max.getFullYear();
-            for (var year = dateFilter.min.getFullYear(); year < maxYear; year++) {
-                if (!_crimedata2.default.isYearRequested(year)) {
-                    this.loadData(year);
-                    allLoaded = false;
+
+            if (notLoaded.length > 0) {
+                var _iteratorNormalCompletion = true;
+                var _didIteratorError = false;
+                var _iteratorError = undefined;
+
+                try {
+                    for (var _iterator = notLoaded[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                        var year = _step.value;
+
+                        if (!_crimedata2.default.isYearRequested(year)) {
+                            this.loadData(year);
+                        }
+                    }
+                } catch (err) {
+                    _didIteratorError = true;
+                    _iteratorError = err;
+                } finally {
+                    try {
+                        if (!_iteratorNormalCompletion && _iterator.return) {
+                            _iterator.return();
+                        }
+                    } finally {
+                        if (_didIteratorError) {
+                            throw _iteratorError;
+                        }
+                    }
                 }
-            }
 
-            if (!allLoaded) {
                 return;
             }
 
@@ -235,11 +228,12 @@ var MapPanel = function (_Component) {
 
             try {
                 for (var _iterator2 = crimes[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-                    var crime = _step2.value;
+                    var _step2$value = _step2.value;
+                    var crime = _step2$value.crime;
+                    var show = _step2$value.show;
 
                     var marker = _CrimeMarker2.default.getMarkerForCrime(crime, this.clusterer);
-                    var epoch = crime.date.getTime();
-                    if (epoch >= min && epoch <= max && typeFilter[_constants2.default.typeMap[crime.primary_type]]) {
+                    if (show) {
                         marker.show();
                     } else {
                         marker.hide();
