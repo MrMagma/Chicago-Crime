@@ -48,8 +48,8 @@ function polarToCartesian(centerX, centerY, radius, angleInDegrees) {
     var angleInRadians = (angleInDegrees - 90) * Math.PI / 180.0;
 
     return {
-        x: centerX + radius * Math.cos(angleInRadians),
-        y: centerY + radius * Math.sin(angleInRadians)
+        x: (centerX + radius * Math.cos(angleInRadians)).toFixed(3),
+        y: (centerY + radius * Math.sin(angleInRadians)).toFixed(3)
     };
 }
 
@@ -84,6 +84,7 @@ var PieSlice = function (_Component) {
         _this.amt = amt;
         _this.color = (0, _tinycolor2.default)(color.toString(16));
 
+        _this.domNode.setAttribute("class", "pie-chart-slice");
         _this.domNode.appendChild(_this.arcNode);
         _this.domNode.appendChild(_this.triNode);
 
@@ -95,14 +96,15 @@ var PieSlice = function (_Component) {
     _createClass(PieSlice, [{
         key: "update",
         value: function update() {
-            var pos1 = polarToCartesian(this.parent.x, this.parent.y, this.parent.radius, this.start),
-                pos2 = polarToCartesian(this.parent.x, this.parent.y, this.parent.radius, this.start + this.amt);
+            var pos1 = polarToCartesian(0, 0, this.parent.radius, 0),
+                pos2 = polarToCartesian(0, 0, this.parent.radius, this.amt);
 
-            this.arcNode.setAttribute("d", describeArc(this.parent.x, this.parent.y, this.parent.radius, this.start, this.start + this.amt));
+            this.domNode.style.transform = "translate(" + this.parent.x + "px, " + this.parent.y + "px) rotate(" + this.start + "deg)";
+            this.arcNode.setAttribute("d", describeArc(0, 0, this.parent.radius, 0, this.amt));
             this.arcNode.setAttribute("fill", this.color.toHexString());
             this.arcNode.setAttribute("stroke-width", 1);
             this.arcNode.setAttribute("stroke", this.color.toHexString());
-            this.triNode.setAttribute("d", "M50 50 L" + pos1.x + " " + pos1.y + " L" + pos2.x + " " + pos2.y);
+            this.triNode.setAttribute("d", "M0 0 L" + pos1.x + " " + pos1.y + " L" + pos2.x + " " + pos2.y);
             this.triNode.setAttribute("fill", this.color.toHexString());
             this.triNode.setAttribute("stroke-width", 1);
             this.triNode.setAttribute("stroke", this.color.toHexString());
