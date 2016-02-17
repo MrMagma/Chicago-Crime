@@ -12,6 +12,10 @@ var _JSONRequest = require("./JSONRequest.js");
 
 var _JSONRequest2 = _interopRequireDefault(_JSONRequest);
 
+var _datahub = require("./datahub.js");
+
+var _datahub2 = _interopRequireDefault(_datahub);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var crimedata = [];
@@ -93,8 +97,9 @@ var datautil = {
                 }).filter(function (val) {
                     return _underscore2.default.isString(val.latitude) && _underscore2.default.isString(val.longitude);
                 }));
-                loaded = true;
+                loaded[year] = true;
                 activeRequests -= 1;
+
                 var _iteratorNormalCompletion2 = true;
                 var _didIteratorError2 = false;
                 var _iteratorError2 = undefined;
@@ -121,6 +126,9 @@ var datautil = {
                 }
 
                 callbacks[year] = [];
+                _datahub2.default.fire("data_loaded", {
+                    year: year
+                });
             };
 
             activeRequests += 1;

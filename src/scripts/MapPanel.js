@@ -83,13 +83,14 @@ class MapPanel extends Component {
             message: "Fetching data. Please wait..."
         });
         
+        hub.on("data_loaded", this.displayData.bind(this));
+        hub.on("filter_changed", this.handleFilterChange.bind(this));
+        
         this.addChild(this.spinner);
-        this.on("change", this.handleChange.bind(this));
         
         this.loadData();
         
         this.map.addLayer(this.clusterer);
-        hub.on("filter_changed", this.handleFilterChange.bind(this));
     }
     loadData(year = (new Date()).getFullYear()) {
         if (!crimedata.hasYearLoaded(year)) {
@@ -104,11 +105,8 @@ class MapPanel extends Component {
                 clearTimeout(spinTimer);
                 if (!crimedata.isRequestActive()) {
                     this.spinner.hide();
-                    this.displayData();
                 }
             });
-        } else {
-            this.displayData();
         }
     }
     displayData() {
@@ -132,14 +130,10 @@ class MapPanel extends Component {
             }
         }
     }
-    handleChange() {
-        this.displayData();
-    }
     handleFilterChange({filterKey}) {
-        if (!/filter$/.test(filterKey)) {
-            return;
+        if (/filter$/.test(filterKey)) {
+            this.displayData();
         }
-        this.setData(filterKey, hub.getData(filterKey));
     }
 }
 

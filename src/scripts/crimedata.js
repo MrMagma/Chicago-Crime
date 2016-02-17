@@ -1,6 +1,7 @@
 import _ from "underscore";
 
 import JSONRequest from "./JSONRequest.js";
+import hub from "./datahub.js";
 
 let crimedata = [];
 
@@ -58,12 +59,17 @@ let datautil = {
                     })
                     .filter(val => _.isString(val.latitude) &&
                         _.isString(val.longitude)));
-                loaded = true;
+                loaded[year] = true;
                 activeRequests -= 1;
+                
                 for (let cb of callbacks[year]) {
                     cb();
                 }
+                
                 callbacks[year] = [];
+                hub.fire("data_loaded", {
+                    year: year
+                });
             };
             
             activeRequests += 1;

@@ -117,6 +117,7 @@ var PieSlice = function (_Component) {
 
             this.start = start;
             this.amt = amt;
+            this.update();
         }
     }]);
 
@@ -145,6 +146,7 @@ var CrimePieChart = exports.CrimePieChart = function (_Component2) {
         }
 
         _datahub2.default.on("data_loaded", _this2.displayData.bind(_this2));
+        _datahub2.default.on("filter_changed", _this2.handleFilterChange.bind(_this2));
         return _this2;
     }
 
@@ -209,7 +211,7 @@ var CrimePieChart = exports.CrimePieChart = function (_Component2) {
 
             var start = 0;
 
-            var slices = counts.map(function (val, i) {
+            this.slices = counts.map(function (val, i) {
                 var amt = val / total * 360;
 
                 var n = new PieSlice({
@@ -240,6 +242,15 @@ var CrimePieChart = exports.CrimePieChart = function (_Component2) {
                     amt: amt
                 });
                 start += amt;
+            }
+        }
+    }, {
+        key: "handleFilterChange",
+        value: function handleFilterChange(_ref2) {
+            var filterKey = _ref2.filterKey;
+
+            if (filterKey === "type_filter") {
+                this.displayData();
             }
         }
     }]);

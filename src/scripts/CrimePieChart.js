@@ -70,6 +70,7 @@ class PieSlice extends Component {
     setDisplay({start = this.start, amt = this.amt}) {
         this.start = start;
         this.amt = amt;
+        this.update();
     }
 }
 
@@ -89,6 +90,7 @@ export class CrimePieChart extends Component {
         }
         
         hub.on("data_loaded", this.displayData.bind(this));
+        hub.on("filter_changed", this.handleFilterChange.bind(this));
     }
     getCrimeCounts() {
         let counts = Array.apply(null, Array(constants.crimeTypes.length))
@@ -113,7 +115,7 @@ export class CrimePieChart extends Component {
         let {counts, total} = this.getCrimeCounts();
         let start = 0;
         
-        let slices = counts.map((val, i) => {
+        this.slices = counts.map((val, i) => {
             let amt = val / total * 360;
             
             let n = new PieSlice({
@@ -138,6 +140,11 @@ export class CrimePieChart extends Component {
                 amt: amt
             });
             start += amt;
+        }
+    }
+    handleFilterChange({filterKey}) {
+        if (filterKey === "type_filter") {
+            this.displayData();
         }
     }
 }

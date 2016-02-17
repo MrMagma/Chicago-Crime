@@ -145,13 +145,14 @@ var MapPanel = function (_Component) {
             message: "Fetching data. Please wait..."
         });
 
+        _datahub2.default.on("data_loaded", _this.displayData.bind(_this));
+        _datahub2.default.on("filter_changed", _this.handleFilterChange.bind(_this));
+
         _this.addChild(_this.spinner);
-        _this.on("change", _this.handleChange.bind(_this));
 
         _this.loadData();
 
         _this.map.addLayer(_this.clusterer);
-        _datahub2.default.on("filter_changed", _this.handleFilterChange.bind(_this));
         return _this;
     }
 
@@ -174,12 +175,9 @@ var MapPanel = function (_Component) {
                         clearTimeout(spinTimer);
                         if (!_crimedata2.default.isRequestActive()) {
                             _this2.spinner.hide();
-                            _this2.displayData();
                         }
                     });
                 })();
-            } else {
-                this.displayData();
             }
         }
     }, {
@@ -255,19 +253,13 @@ var MapPanel = function (_Component) {
             }
         }
     }, {
-        key: "handleChange",
-        value: function handleChange() {
-            this.displayData();
-        }
-    }, {
         key: "handleFilterChange",
         value: function handleFilterChange(_ref2) {
             var filterKey = _ref2.filterKey;
 
-            if (!/filter$/.test(filterKey)) {
-                return;
+            if (/filter$/.test(filterKey)) {
+                this.displayData();
             }
-            this.setData(filterKey, _datahub2.default.getData(filterKey));
         }
     }]);
 
